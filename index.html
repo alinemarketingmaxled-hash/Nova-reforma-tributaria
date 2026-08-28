@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nova Reforma Tributária — IBS, CBS e Imposto Seletivo | Guia executivo</title>
+<meta name="description" content="Guia executivo da Reforma Tributária brasileira: IBS, CBS, Imposto Seletivo, cronograma de transição 2026–2033, split payment, créditos e um plano de adequação para a sua empresa.">
+<meta name="theme-color" content="#f2f2f0">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Nova Reforma Tributária — Guia executivo">
+<meta property="og:description" content="IBS, CBS, Imposto Seletivo e o cronograma 2026–2033 explicados para quem precisa decidir.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='28' fill='%230a0a0a'/><text y='70' x='50' text-anchor='middle' font-size='54' font-family='sans-serif' font-weight='600' fill='%23fff'>R</text></svg>">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Nova Reforma Tributária","inLanguage":"pt-BR","description":"Guia executivo da Reforma Tributária brasileira: IBS, CBS, Imposto Seletivo, cronograma 2026–2033 e ferramentas de diagnóstico para empresas."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"A carga tributária vai aumentar?","acceptedAnswer":{"@type":"Answer","text":"A reforma foi desenhada para ser neutra em arrecadação: o objetivo é manter a carga agregada, não elevá-la. Neutralidade agregada, porém, não é neutralidade individual — empresas intensivas em insumos tendem a melhorar, e empresas intensivas em mão de obra tendem a piorar."}},{"@type":"Question","name":"O Simples Nacional acaba com a reforma tributária?","acceptedAnswer":{"@type":"Answer","text":"Não. O Simples permanece. O optante escolhe entre recolher IBS e CBS dentro da guia unificada, transferindo crédito reduzido ao cliente, ou recolher por fora pelo regime regular, gerando crédito integral."}},{"@type":"Question","name":"O que muda no dia a dia da empresa em 2026?","acceptedAnswer":{"@type":"Answer","text":"2026 é o ano-teste: CBS a 0,9% e IBS a 0,1%, compensáveis, com efeito financeiro próximo de zero. A mudança real é de obrigação acessória — os documentos fiscais já precisam sair com os novos campos preenchidos."}},{"@type":"Question","name":"Como funciona o cashback da reforma tributária?","acceptedAnswer":{"@type":"Answer","text":"Parte do IBS e da CBS pagos por famílias de baixa renda inscritas no CadÚnico é devolvida, com percentuais maiores para energia elétrica, água, esgoto e gás de cozinha. A devolução ocorre após o consumo."}},{"@type":"Question","name":"Existem alíquotas reduzidas de IBS e CBS?","acceptedAnswer":{"@type":"Answer","text":"Sim. Redução de 60% para saúde, educação, transporte coletivo, dispositivos médicos e alimentos para consumo humano; redução de 30% para profissões liberais regulamentadas; e alíquota zero para a Cesta Básica Nacional de Alimentos."}},{"@type":"Question","name":"Quando começar o projeto de adequação à reforma?","acceptedAnswer":{"@type":"Answer","text":"O quanto antes. A janela confortável se fecha em 2027, quando a CBS passa a valer integralmente. Projetos de ERP, reclassificação de catálogo e reprecificação levam de seis a dezoito meses em empresas de médio porte."}}]}</script>
+</head>
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- ══════════ RAIL (barra lateral de ícones, desktop) ══════════ -->
+<aside class="rail" aria-label="Navegação rápida">
+  <a class="rail__mark" href="#inicio" aria-label="Início">
+    <span>R</span>
+  </a>
+  <nav class="rail__nav">
+    <a href="#inicio"     data-spy="inicio"     data-tip="Início"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg></a>
+    <a href="#tributos"   data-spy="tributos"   data-tip="Os novos tributos"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg></a>
+    <a href="#cronograma" data-spy="cronograma" data-tip="Cronograma"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></a>
+    <a href="#impactos"   data-spy="impactos"   data-tip="Impactos por setor"><svg viewBox="0 0 24 24"><path d="M4 19.5V12M10 19.5V5M16 19.5v-5.5M22 19.5h-20"/></svg></a>
+    <a href="#diagnostico" data-spy="diagnostico" data-tip="Raio-X do seu negócio"><svg viewBox="0 0 24 24"><rect x="4.5" y="2.5" width="15" height="19" rx="3"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16.5h2M12 16.5h4"/></svg></a>
+    <a href="#checklist"  data-spy="checklist"  data-tip="Checklist"><svg viewBox="0 0 24 24"><path d="M4 7l2.5 2.5L11 5"/><path d="M4 17l2.5 2.5L11 15"/><path d="M14 8h6M14 18h6"/></svg></a>
+    <a href="#faq"        data-spy="faq"        data-tip="Perguntas frequentes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 1 1 3.2 2.5c-.5.2-.7.6-.7 1.1v.6"/><path d="M12 16.8h.01"/></svg></a>
+  </nav>
+  <a class="rail__cta" href="#contato" data-tip="Falar com especialista">
+    <svg viewBox="0 0 24 24"><path d="M4 6.5h16v11H8l-4 3.5z"/></svg>
+  </a>
+</aside>
+
+<div class="shell">
+
+  <!-- ══════════ TOPO ══════════ -->
+  <header class="topbar">
+    <a class="brand" href="#inicio">
+      <span class="brand__mark">R</span>
+      <span class="brand__txt">Reforma<span>Tributária</span></span>
+    </a>
+
+    <nav class="topnav" aria-label="Navegação principal">
+      <a href="#tributos">Tributos</a>
+      <a href="#cronograma">Cronograma</a>
+      <a href="#impactos">Impactos</a>
+      <a href="#diagnostico">Raio-X</a>
+      <a href="#faq">Dúvidas</a>
+    </nav>
+
+    <div class="topbar__tools">
+      <div class="pill pill--status" title="Estágio atual da reforma">
+        <span class="dot"></span>
+        <span class="pill__k">2026</span>
+        <span class="pill__v">Ano-teste</span>
+      </div>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Alternar tema claro e escuro">
+        <svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M22 12h-2.4M4.4 12H2M18.9 5.1l-1.7 1.7M6.8 17.2l-1.7 1.7M18.9 18.9l-1.7-1.7M6.8 6.8 5.1 5.1"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8.4 8.4 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg>
+      </button>
+      <a class="btn btn--dark topbar__cta" href="#contato">Diagnóstico gratuito</a>
+      <button class="icon-btn burger" id="burger" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobilenav" id="mobilenav" hidden>
+    <a href="#tributos">Os novos tributos</a>
+    <a href="#cronograma">Cronograma 2026–2033</a>
+    <a href="#impactos">Impactos por setor</a>
+    <a href="#diagnostico">Raio-X do seu negócio</a>
+    <a href="#checklist">Checklist de adequação</a>
+    <a href="#faq">Perguntas frequentes</a>
+    <a class="btn btn--dark" href="#contato">Diagnóstico gratuito</a>
+  </div>
+
+  <main id="conteudo">
+
+  <!-- ══════════ HERO ══════════ -->
+  <section class="hero" id="inicio">
+    <div class="hero__head">
+      <p class="eyebrow"><span class="dot"></span> EC 132/2023 · LC 214/2025 · em regulamentação</p>
+      <h1 class="display">
+        Nova Reforma<br>
+        <em>Tributária</em>
+      </h1>
+      <p class="lede">
+        O maior redesenho do sistema tributário brasileiro em 60 anos já começou.
+        Traduzimos IBS, CBS e Imposto Seletivo em decisões práticas — preço, crédito,
+        caixa e sistemas — antes que o custo da adequação vire prejuízo.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--dark btn--lg" href="#contato">
+          Agendar diagnóstico
+          <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn--ghost btn--lg" href="#cronograma">Ver cronograma</a>
+      </div>
+    </div>
+
+    <!-- bento -->
+    <div class="bento">
+
+      <article class="card card--progress">
+        <header class="card__head">
+          <h2>Avanço da transição</h2>
+          <span class="tag">2026 → 2033</span>
+        </header>
+        <p class="metric"><span data-count="12" data-decimals="1">0,0</span><small>%</small></p>
+        <p class="metric__sub">do período de convivência entre os dois sistemas já percorrido</p>
+        <div class="track"><i style="--w:12%"></i></div>
+        <ul class="legend">
+          <li><span class="key key--solid"></span>Sistema novo <b>IBS + CBS</b></li>
+          <li><span class="key key--soft"></span>Sistema atual <b>PIS/Cofins · ICMS · ISS</b></li>
+        </ul>
+      </article>
+
+      <article class="card card--dark card--chart">
+        <header class="card__head">
+          <h2>Alíquota de referência</h2>
+          <span class="tag tag--inv">estimativa</span>
+        </header>
+        <p class="metric metric--inv"><span data-count="26.5" data-decimals="1">0,0</span><small>%</small></p>
+        <p class="metric__sub">IBS + CBS somados, conforme estudos do Ministério da Fazenda. O número
+          final será fixado por lei ordinária e revisado ao longo da transição.</p>
+        <svg class="spark" viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity=".35"/>
+            <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient></defs>
+          <path class="spark__area" d="M0,78 C40,74 60,60 95,58 C130,56 150,40 185,34 C220,28 245,16 300,10 L300,90 L0,90 Z" fill="url(#g1)"/>
+          <path class="spark__line" d="M0,78 C40,74 60,60 95,58 C130,56 150,40 185,34 C220,28 245,16 300,10"/>
+          <circle class="spark__dot" cx="300" cy="10" r="4"/>
+        </svg>
+      </article>
+
+      <article class="card card--stack">
+        <header class="card__head"><h2>O que substitui o quê</h2></header>
+        <ul class="swap">
+          <li><span class="old">PIS · Cofins</span> <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg> <span class="new">CBS</span></li>
+          <li><span class="old">ICMS · ISS</span> <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg> <span class="new">IBS</span></li>
+          <li><span class="old">IPI (regulatório)</span> <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg> <span class="new">IS</span></li>
+        </ul>
+      </article>
+
+      <article class="card card--files">
+        <header class="card__head"><h2>Material de apoio</h2>
+          <button class="round-btn" type="button" aria-label="Ver todos os materiais">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </header>
+        <ul class="files">
+          <li><span class="file-ic">PDF</span><div><b>Guia executivo da reforma</b><small>2,4 MB · 38 páginas</small></div></li>
+          <li><span class="file-ic">XLS</span><div><b>Planilha de impacto por CFOP</b><small>860 KB</small></div></li>
+          <li><span class="file-ic">DOC</span><div><b>Modelo de plano de adequação</b><small>1,1 MB</small></div></li>
+        </ul>
+      </article>
+
+      <article class="card card--team">
+        <header class="card__head"><h2>Quem conduz</h2></header>
+        <div class="avatars" aria-hidden="true">
+          <span>MA</span><span>RC</span><span>LF</span><span>PS</span><span class="avatars__more">+9</span>
+        </div>
+        <p class="metric__sub">Time multidisciplinar de tributaristas, contadores e engenheiros de
+          sistemas fiscais acompanhando cada nota técnica publicada.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ══════════ FAIXA DE NÚMEROS ══════════ -->
+  <section class="strip" aria-label="Números da reforma">
+    <div><b><span data-count="3">0</span></b><span>novos tributos sobre consumo</span></div>
+    <div><b><span data-count="5">0</span></b><span>tributos atuais extintos</span></div>
+    <div><b><span data-count="7">0</span> anos</b><span>de transição até 2033</span></div>
+    <div><b><span data-count="100">0</span>%</b><span>de crédito sobre insumos tributados</span></div>
+  </section>
+
+  <!-- ══════════ TRIBUTOS ══════════ -->
+  <section class="section" id="tributos">
+    <header class="section__head">
+      <p class="eyebrow"><span class="dot"></span> Fundamentos</p>
+      <h2 class="h2">Três tributos no lugar de cinco</h2>
+      <p class="section__lede">
+        O Brasil adota um IVA dual: um imposto federal e um imposto compartilhado entre
+        estados e municípios, com a mesma base de cálculo e as mesmas regras de crédito.
+        Ao lado deles, um imposto seletivo com função extrafiscal.
+      </p>
+    </header>
+
+    <div class="grid-3">
+      <article class="card card--tax">
+        <span class="badge">Federal</span>
+        <h3>CBS</h3>
+        <p class="card__sub">Contribuição sobre Bens e Serviços</p>
+        <p>Substitui <b>PIS</b> e <b>Cofins</b>. Arrecadação e fiscalização pela Receita Federal,
+          com crédito financeiro amplo e não cumulatividade plena.</p>
+        <dl class="specs">
+          <div><dt>Substitui</dt><dd>PIS, Cofins</dd></div>
+          <div><dt>Vigência plena</dt><dd>2027</dd></div>
+          <div><dt>Gestão</dt><dd>Receita Federal</dd></div>
+        </dl>
+      </article>
+
+      <article class="card card--tax card--dark">
+        <span class="badge badge--inv">Estados e municípios</span>
+        <h3>IBS</h3>
+        <p class="card__sub">Imposto sobre Bens e Serviços</p>
+        <p>Substitui <b>ICMS</b> e <b>ISS</b>. Cobrado no destino, com alíquota própria de cada
+          ente e gestão pelo Comitê Gestor do IBS.</p>
+        <dl class="specs">
+          <div><dt>Substitui</dt><dd>ICMS, ISS</dd></div>
+          <div><dt>Transição</dt><dd>2029 – 2032</dd></div>
+          <div><dt>Gestão</dt><dd>Comitê Gestor</dd></div>
+        </dl>
+      </article>
+
+      <article class="card card--tax">
+        <span class="badge">Extrafiscal</span>
+        <h3>IS</h3>
+        <p class="card__sub">Imposto Seletivo</p>
+        <p>Incide uma única vez sobre bens e serviços prejudiciais à saúde ou ao meio
+          ambiente. Não gera crédito e integra a base do IBS e da CBS.</p>
+        <dl class="specs">
+          <div><dt>Natureza</dt><dd>Monofásico</dd></div>
+          <div><dt>Início</dt><dd>2027</dd></div>
+          <div><dt>Crédito</dt><dd>Não gera</dd></div>
+        </dl>
+      </article>
+    </div>
+
+    <div class="grid-2 grid-2--tight">
+      <article class="card card--note">
+        <div class="note__ic"><svg viewBox="0 0 24 24"><path d="M12 3 3 8v5c0 5 3.8 7.6 9 8.9 5.2-1.3 9-3.9 9-8.9V8z"/><path d="M9 12.2l2.2 2.2L15.4 10"/></svg></div>
+        <h3>Não cumulatividade plena</h3>
+        <p>Todo tributo pago na etapa anterior vira crédito, inclusive sobre bens de uso e
+          consumo. O imposto deixa de compor o próprio preço — cai a tributação “por dentro”
+          e o custo fiscal passa a ser visível na nota.</p>
+      </article>
+      <article class="card card--note">
+        <div class="note__ic"><svg viewBox="0 0 24 24"><path d="M3 7h18v11H3z"/><path d="M3 11h18"/><path d="M7.5 15h3"/></svg></div>
+        <h3>Split payment</h3>
+        <p>Na liquidação financeira da operação, a parcela de IBS e CBS é separada e recolhida
+          automaticamente. O impacto real não é de carga: é de <b>capital de giro</b> — o dinheiro
+          do imposto nunca chega a transitar pelo seu caixa.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════ CRONOGRAMA ══════════ -->
+  <section class="section section--tinted" id="cronograma">
+    <header class="section__head">
+      <p class="eyebrow"><span class="dot"></span> Linha do tempo</p>
+      <h2 class="h2">Do ano-teste ao sistema pleno</h2>
+      <p class="section__lede">
+        A transição é longa e assimétrica: a CBS entra rápido, o IBS entra devagar.
+        Durante quase toda a década a empresa opera <b>dois sistemas ao mesmo tempo</b>.
+      </p>
+    </header>
+
+    <ol class="timeline">
+      <li class="tl tl--now">
+        <div class="tl__year">2026</div>
+        <div class="tl__body">
+          <span class="tag tag--live"><span class="dot"></span> estamos aqui</span>
+          <h3>Ano-teste</h3>
+          <p>CBS a 0,9% e IBS a 0,1%, compensáveis com PIS/Cofins. Na prática, não há carga
+            adicional — há <b>obrigação acessória</b>. É o ano de acertar cadastros, layout de
+            documento fiscal e parametrização de ERP sem penalidade material.</p>
+        </div>
+      </li>
+      <li class="tl">
+        <div class="tl__year">2027</div>
+        <div class="tl__body">
+          <h3>CBS em vigor · PIS/Cofins extintos</h3>
+          <p>A CBS passa a valer integralmente e PIS e Cofins são extintos. O Imposto Seletivo
+            começa a incidir e o IPI tem alíquotas zeradas, salvo na Zona Franca de Manaus.</p>
+        </div>
+      </li>
+      <li class="tl">
+        <div class="tl__year">2029<span>–2032</span></div>
+        <div class="tl__body">
+          <h3>Transição do IBS</h3>
+          <p>ICMS e ISS são reduzidos em degraus anuais enquanto o IBS sobe na mesma proporção.
+            Quatro exercícios com dois regimes convivendo, cada um com sua apuração, seu crédito
+            e sua obrigação acessória.</p>
+        </div>
+      </li>
+      <li class="tl tl--end">
+        <div class="tl__year">2033</div>
+        <div class="tl__body">
+          <h3>Sistema pleno</h3>
+          <p>ICMS e ISS deixam de existir. Restam IBS, CBS e IS, com cobrança no destino e
+            crédito financeiro amplo. Encerra-se a guerra fiscal baseada em benefício de ICMS.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ══════════ IMPACTOS ══════════ -->
+  <section class="section" id="impactos">
+    <header class="section__head">
+      <p class="eyebrow"><span class="dot"></span> Leitura setorial</p>
+      <h2 class="h2">O efeito não é o mesmo para todo mundo</h2>
+      <p class="section__lede">
+        Quem compra muito insumo tributado tende a ganhar com o crédito amplo. Quem vende
+        mão de obra com pouca aquisição tende a sentir a alíquota cheia. Selecione um setor.
+      </p>
+    </header>
+
+    <div class="sectors" id="sectors">
+      <div class="sectors__tabs" role="tablist" aria-label="Setores">
+        <button role="tab" class="chip is-on" data-sector="industria" aria-selected="true">Indústria</button>
+        <button role="tab" class="chip" data-sector="varejo" aria-selected="false">Varejo</button>
+        <button role="tab" class="chip" data-sector="servicos" aria-selected="false">Serviços</button>
+        <button role="tab" class="chip" data-sector="agro" aria-selected="false">Agronegócio</button>
+        <button role="tab" class="chip" data-sector="saude" aria-selected="false">Saúde e educação</button>
+        <button role="tab" class="chip" data-sector="tec" aria-selected="false">Tecnologia</button>
+      </div>
+
+      <div class="sectors__panel card" id="sectorPanel" role="tabpanel" aria-live="polite">
+        <!-- preenchido por JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ DIAGNÓSTICO ══════════ -->
+  <section class="section section--tinted" id="diagnostico">
+    <header class="section__head">
+      <p class="eyebrow"><span class="dot"></span> Ferramenta · o seu caso</p>
+      <h2 class="h2">Raio-X do seu negócio</h2>
+      <p class="section__lede">
+        Descreva a sua operação — o que você vende, quanto fatura, sob qual regime — e
+        receba na hora uma leitura do impacto: carga, margem, capital de giro e as frentes
+        que você precisa atacar primeiro. Nada é enviado para servidor algum: o cálculo
+        acontece no seu navegador.
+      </p>
+    </header>
+
+    <div class="diag">
+
+      <!-- ─────── entrada ─────── -->
+      <form class="card diag__form" id="diagForm" novalidate>
+
+        <fieldset class="fs">
+          <legend><span class="fs__n">1</span> Quem é você</legend>
+
+          <div class="field">
+            <label for="dNome">Nome da empresa ou do site</label>
+            <input id="dNome" type="text" placeholder="Ex.: Maxled Iluminação" autocomplete="organization">
+          </div>
+
+          <div class="field">
+            <label for="dSetor">O que o seu negócio faz</label>
+            <select id="dSetor">
+              <option value="varejo">Comércio e varejo</option>
+              <option value="ecommerce">E-commerce / loja online</option>
+              <option value="industria">Indústria e manufatura</option>
+              <option value="servicos">Serviços em geral</option>
+              <option value="tec">Tecnologia, software e SaaS</option>
+              <option value="marketing">Marketing, agência e criação</option>
+              <option value="liberal">Profissão liberal regulamentada</option>
+              <option value="saude">Saúde e educação</option>
+              <option value="agro">Agronegócio e alimentos</option>
+              <option value="construcao">Construção e imobiliário</option>
+              <option value="transporte">Transporte e logística</option>
+              <option value="alimentacao">Bares e restaurantes</option>
+            </select>
+            <p class="hint" id="dSetorHint">—</p>
+          </div>
+
+          <div class="field">
+            <label>Para quem você vende</label>
+            <div class="seg" id="dCanal" role="group" aria-label="Canal de vendas">
+              <button type="button" data-v="b2b">Empresas <small>B2B</small></button>
+              <button type="button" data-v="misto" class="is-on">Os dois <small>misto</small></button>
+              <button type="button" data-v="b2c">Consumidor <small>B2C</small></button>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="fs">
+          <legend><span class="fs__n">2</span> Os seus números</legend>
+
+          <div class="field">
+            <label for="dFat">Faturamento anual</label>
+            <div class="input-wrap"><span class="prefix">R$</span>
+              <input id="dFat" type="text" inputmode="numeric" value="6.000.000">
+            </div>
+            <p class="hint" id="dFatHint">R$ 500.000 por mês · porte médio</p>
+          </div>
+
+          <div class="field">
+            <label for="dRegime">Regime tributário</label>
+            <select id="dRegime">
+              <option value="simples">Simples Nacional</option>
+              <option value="presumido" selected>Lucro Presumido</option>
+              <option value="real">Lucro Real</option>
+            </select>
+            <p class="hint" id="dRegimeHint">—</p>
+          </div>
+
+          <div class="field">
+            <label for="dInsumos">Quanto da receita vai para fornecedores <b id="vdInsumos">45%</b></label>
+            <input id="dInsumos" class="range" type="range" min="0" max="90" step="1" value="45">
+            <p class="hint">Mercadorias, matéria-prima, fretes, softwares, energia — tudo que vem
+              de outra empresa com nota. É daqui que nasce o seu crédito no novo sistema.</p>
+          </div>
+
+          <div class="field">
+            <label for="dFolha">Quanto da receita vai para folha de pagamento <b id="vdFolha">25%</b></label>
+            <input id="dFolha" class="range" type="range" min="0" max="80" step="1" value="25">
+            <p class="hint">Salários e encargos não geram crédito de IBS e CBS. Quanto maior a
+              folha em relação à receita, maior a exposição à alíquota cheia.</p>
+          </div>
+
+          <div class="field">
+            <label for="dAtual">Carga atual sobre consumo <b id="vdAtual">9,25%</b></label>
+            <input id="dAtual" class="range" type="range" min="0" max="30" step="0.25" value="9.25">
+            <p class="hint">PIS, Cofins, ICMS e ISS efetivamente pagos, como percentual da
+              receita. Preenchemos por regime e setor — ajuste com o seu número real.</p>
+          </div>
+
+          <div class="field">
+            <label for="dNova">Alíquota IBS + CBS aplicável <b id="vdNova">26,5%</b></label>
+            <input id="dNova" class="range" type="range" min="0" max="30" step="0.05" value="26.5">
+            <p class="hint" id="dNovaHint">—</p>
+          </div>
+
+          <div class="field field--switch">
+            <label for="dBenef">Uso benefício ou incentivo de ICMS</label>
+            <input id="dBenef" type="checkbox" class="switch">
+          </div>
+          <div class="field field--switch">
+            <label for="dSplit">Considerar split payment no caixa</label>
+            <input id="dSplit" type="checkbox" class="switch" checked>
+          </div>
+
+          <button class="btn btn--ghost btn--block" type="button" id="dReset">Restaurar valores sugeridos</button>
+        </fieldset>
+      </form>
+
+      <!-- ─────── saída ─────── -->
+      <div class="diag__out" id="diagOut">
+
+        <article class="card card--dark diag__hero">
+          <header class="card__head">
+            <h3 id="dTitulo">Leitura do seu negócio</h3>
+            <span class="tag tag--inv" id="dVeredito">—</span>
+          </header>
+
+          <p class="metric metric--inv">
+            <span id="dDelta">0,0</span><small>p.p.</small>
+          </p>
+          <p class="metric__sub" id="dDeltaTxt">de variação na carga sobre a receita, comparando hoje com o sistema pleno de 2033</p>
+
+          <div class="bars">
+            <div class="bar"><span>Hoje</span><i id="dBarA" style="--w:40%"></i><b id="dValA">R$ 0</b></div>
+            <div class="bar bar--new"><span>2033</span><i id="dBarB" style="--w:40%"></i><b id="dValB">R$ 0</b></div>
+          </div>
+
+          <p class="diag__annual" id="dAnual">—</p>
+        </article>
+
+        <div class="diag__stats">
+          <article class="card diag__stat">
+            <h4>Débito bruto mensal</h4>
+            <p class="metric metric--sm" id="dDebito">R$ 0</p>
+            <p class="metric__sub">IBS + CBS sobre o que você vende</p>
+          </article>
+          <article class="card diag__stat">
+            <h4>Crédito de insumos</h4>
+            <p class="metric metric--sm" id="dCredito">R$ 0</p>
+            <p class="metric__sub">recuperável integralmente, todo mês</p>
+          </article>
+          <article class="card diag__stat">
+            <h4>Imposto líquido</h4>
+            <p class="metric metric--sm" id="dLiquido">R$ 0</p>
+            <p class="metric__sub">o que sobra para recolher</p>
+          </article>
+          <article class="card diag__stat diag__stat--warn">
+            <h4>Caixa retido no split</h4>
+            <p class="metric metric--sm" id="dCaixa">R$ 0</p>
+            <p class="metric__sub">sai do giro no ato da liquidação</p>
+          </article>
+        </div>
+
+        <article class="card diag__risk">
+          <header class="card__head">
+            <h3>Grau de exposição</h3>
+            <span class="tag" id="dRiscoTag">—</span>
+          </header>
+          <div class="riskbar"><i id="dRiscoBar" style="--w:0%"></i></div>
+          <ul class="riskfactors" id="dFatores"></ul>
+        </article>
+
+        <article class="card diag__actions">
+          <header class="card__head"><h3>As suas prioridades</h3><span class="tag" id="dAcoesTag">—</span></header>
+          <ol class="prio" id="dAcoes"></ol>
+          <a class="btn btn--dark btn--block" href="#contato">
+            Discutir esse cenário com um especialista
+            <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+
+        <p class="disclaimer">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11.5v5"/></svg>
+          Estimativa de ordem de grandeza, para orientar a conversa — não substitui análise
+          fiscal. O modelo ignora diferimentos, cashback, trava de crédito por inadimplência
+          do fornecedor e as particularidades de cada regime específico.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ CHECKLIST ══════════ -->
+  <section class="section" id="checklist">
+    <header class="section__head">
+      <p class="eyebrow"><span class="dot"></span> Plano de ação</p>
+      <h2 class="h2">Checklist de adequação</h2>
+      <p class="section__lede">
+        Marque o que a sua empresa já resolveu. O progresso fica salvo neste navegador.
+      </p>
+    </header>
+
+    <div class="check">
+      <aside class="card card--dark check__score">
+        <header class="card__head"><h3>Prontidão</h3><span class="tag tag--inv" id="ckStage">—</span></header>
+        <div class="gauge">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="gauge__bg" cx="60" cy="60" r="52"/>
+            <circle class="gauge__fg" id="gaugeFg" cx="60" cy="60" r="52"/>
+          </svg>
+          <b id="ckPct">0%</b>
+        </div>
+        <p class="metric__sub"><span id="ckDone">0</span> de <span id="ckTotal">0</span> frentes concluídas.
+          Cada item não resolvido em 2026 vira retrabalho caro em 2027.</p>
+        <button class="btn btn--inv" type="button" id="ckReset">Limpar marcações</button>
+      </aside>
+
+      <div class="check__list" id="ckList">
+        <div class="check__group" data-group="Fiscal e cadastral">
+          <label class="ck"><input type="checkbox" data-ck="1"><span class="ck__box"></span><div><b>Revisar a classificação fiscal de todo o catálogo</b><small>NCM e NBS corretos são o que define alíquota, redução e regime específico.</small></div></label>
+          <label class="ck"><input type="checkbox" data-ck="2"><span class="ck__box"></span><div><b>Mapear benefícios de ICMS que deixarão de existir</b><small>Quantifique a dependência e negocie preço antes de 2029.</small></div></label>
+          <label class="ck"><input type="checkbox" data-ck="3"><span class="ck__box"></span><div><b>Levantar saldo credor de ICMS acumulado</b><small>Há regra de aproveitamento em parcelas — ela precisa ser homologada.</small></div></label>
+        </div>
+        <div class="check__group" data-group="Sistemas">
+          <label class="ck"><input type="checkbox" data-ck="4"><span class="ck__box"></span><div><b>Atualizar ERP e emissor para o novo layout</b><small>Campos de IBS, CBS e IS já constam das notas técnicas vigentes.</small></div></label>
+          <label class="ck"><input type="checkbox" data-ck="5"><span class="ck__box"></span><div><b>Preparar apuração paralela dos dois sistemas</b><small>De 2029 a 2032 será necessário apurar tudo em duplicidade.</small></div></label>
+          <label class="ck"><input type="checkbox" data-ck="6"><span class="ck__box"></span><div><b>Integrar meios de pagamento ao split payment</b><small>Adquirente e banco passam a fazer parte da rotina fiscal.</small></div></label>
+        </div>
+        <div class="check__group" data-group="Financeiro e comercial">
+          <label class="ck"><input type="checkbox" data-ck="7"><span class="ck__box"></span><div><b>Reprecificar considerando crédito amplo</b><small>Tributo fora do preço muda margem, tabela e política de desconto.</small></div></label>
+          <label class="ck"><input type="checkbox" data-ck="8"><span class="ck__box"></span><div><b>Reprojetar o capital de giro</b><small>Com split payment, o imposto sai do caixa no ato da liquidação.</small></div></label>
+          <label class="ck"><input type="checkbox" data-ck="9"><span class="ck__box"></span><div><b>Qualificar a base de fornecedores</b><small>Fornecedor fora do regime deixa de gerar crédito e encarece o insumo.</small></div></label>
+          <label class="ck"><input type="checkbox" data-ck="10"><span class="ck__box"></span><div><b>Revisar contratos de longo prazo</b><small>Inclua cláusula de reequilíbrio para a transição 2029–2032.</small></div></label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FAQ ══════════ -->
+  <section class="section section--tinted" id="faq">
+    <header class="section__head">
+      <p class="eyebrow"><span class="dot"></span> Dúvidas frequentes</p>
+      <h2 class="h2">O que mais perguntam</h2>
+    </header>
+
+    <div class="faq">
+      <details class="qa" open>
+        <summary>A carga tributária vai aumentar?<span class="qa__ic"></span></summary>
+        <p>A reforma foi desenhada para ser neutra em arrecadação: o objetivo declarado é
+          manter a carga agregada, não elevá-la. Mas neutralidade agregada não significa
+          neutralidade individual — há redistribuição relevante entre setores. Empresas
+          intensivas em insumos tendem a melhorar; empresas intensivas em mão de obra,
+          com pouca compra tributada, tendem a piorar.</p>
+      </details>
+      <details class="qa">
+        <summary>O Simples Nacional acaba?<span class="qa__ic"></span></summary>
+        <p>Não. O Simples permanece. O optante passa a escolher entre recolher IBS e CBS
+          dentro da guia unificada — mais simples, porém transferindo crédito reduzido ao
+          cliente — ou recolher por fora, pelo regime regular, gerando crédito integral.
+          Para quem vende B2B, essa escolha vira argumento comercial.</p>
+      </details>
+      <details class="qa">
+        <summary>O que muda no dia a dia já em 2026?<span class="qa__ic"></span></summary>
+        <p>Obrigação acessória. As alíquotas-teste de 0,9% e 0,1% são compensáveis, então o
+          efeito financeiro é próximo de zero — mas os documentos fiscais já precisam sair
+          com os novos campos preenchidos corretamente. É o ano de errar sem custo material,
+          e ele não se repete.</p>
+      </details>
+      <details class="qa">
+        <summary>Como funciona o cashback?<span class="qa__ic"></span></summary>
+        <p>Parte do IBS e da CBS pagos por famílias de baixa renda inscritas no CadÚnico é
+          devolvida, com percentuais maiores para itens essenciais como energia elétrica,
+          água, esgoto e gás de cozinha. A devolução ocorre depois do consumo, sem
+          desonerar a operação do vendedor.</p>
+      </details>
+      <details class="qa">
+        <summary>Existem alíquotas reduzidas?<span class="qa__ic"></span></summary>
+        <p>Sim. Há redução de 60% para grupos como saúde, educação, transporte coletivo,
+          dispositivos médicos e alimentos destinados ao consumo humano; redução de 30% para
+          profissões liberais regulamentadas; e alíquota zero para a Cesta Básica Nacional
+          de Alimentos. Cada hipótese depende de enquadramento — o que devolve a discussão
+          para a classificação fiscal do seu catálogo.</p>
+      </details>
+      <details class="qa">
+        <summary>Quando devo começar o projeto de adequação?</summary>
+        <p>Ontem. A janela confortável se fecha em 2027, quando a CBS passa a valer integralmente
+          e o erro de parametrização vira autuação. Projetos de ERP, reclassificação de catálogo
+          e reprecificação levam de seis a dezoito meses em empresas de médio porte.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ══════════ CONTATO ══════════ -->
+  <section class="section" id="contato">
+    <div class="cta card card--dark">
+      <div class="cta__txt">
+        <p class="eyebrow eyebrow--inv"><span class="dot"></span> Diagnóstico sem custo</p>
+        <h2 class="h2 h2--inv">Descubra em 30 minutos<br>onde a reforma te atinge</h2>
+        <p>Uma conversa objetiva com um especialista: lemos a sua operação, apontamos as três
+          frentes mais críticas e devolvemos um plano de adequação com prazos. Sem compromisso.</p>
+        <ul class="ticks">
+          <li>Leitura do seu perfil de crédito e da exposição a benefícios de ICMS</li>
+          <li>Estimativa de impacto em margem e em capital de giro</li>
+          <li>Roteiro de sistemas e de obrigações acessórias por ano</li>
+        </ul>
+      </div>
+
+      <form class="cta__form" id="leadForm" novalidate>
+        <div class="field">
+          <label for="nome">Nome</label>
+          <input id="nome" name="nome" type="text" autocomplete="name" required placeholder="Como podemos te chamar">
+          <span class="err" data-err="nome"></span>
+        </div>
+        <div class="field">
+          <label for="email">E-mail corporativo</label>
+          <input id="email" name="email" type="email" autocomplete="email" required placeholder="voce@empresa.com.br">
+          <span class="err" data-err="email"></span>
+        </div>
+        <div class="field">
+          <label for="empresa">Empresa</label>
+          <input id="empresa" name="empresa" type="text" autocomplete="organization" required placeholder="Razão social ou nome fantasia">
+          <span class="err" data-err="empresa"></span>
+        </div>
+        <div class="field">
+          <label for="porte">Faturamento anual</label>
+          <select id="porte" name="porte">
+            <option>Até R$ 4,8 milhões</option>
+            <option selected>R$ 4,8 mi a R$ 30 mi</option>
+            <option>R$ 30 mi a R$ 300 mi</option>
+            <option>Acima de R$ 300 milhões</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="msg">Contexto <small>(opcional)</small></label>
+          <textarea id="msg" name="msg" rows="3" placeholder="Setor, principal dúvida, sistema utilizado…"></textarea>
+        </div>
+        <button class="btn btn--inv btn--lg btn--block" type="submit">
+          Solicitar diagnóstico
+          <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="formnote">Retorno em até um dia útil. Seus dados não são compartilhados.</p>
+        <p class="formok" id="formOk" hidden></p>
+      </form>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ══════════ RODAPÉ ══════════ -->
+  <footer class="footer">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <span class="brand__mark">R</span>
+        <p>Conteúdo de referência sobre a Reforma Tributária brasileira, atualizado conforme
+          a EC 132/2023, a LC 214/2025 e as notas técnicas publicadas.</p>
+      </div>
+      <nav class="footer__nav" aria-label="Rodapé">
+        <div>
+          <h4>Conteúdo</h4>
+          <a href="#tributos">Os novos tributos</a>
+          <a href="#cronograma">Cronograma</a>
+          <a href="#impactos">Impactos por setor</a>
+        </div>
+        <div>
+          <h4>Ferramentas</h4>
+          <a href="#diagnostico">Raio-X do seu negócio</a>
+          <a href="#checklist">Checklist de adequação</a>
+          <a href="#faq">Perguntas frequentes</a>
+        </div>
+        <div>
+          <h4>Fontes oficiais</h4>
+          <a href="https://www.gov.br/fazenda/pt-br/acesso-a-informacao/acoes-e-programas/reforma-tributaria" target="_blank" rel="noopener">Ministério da Fazenda</a>
+          <a href="https://www.gov.br/receitafederal/pt-br" target="_blank" rel="noopener">Receita Federal</a>
+          <a href="https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc132.htm" target="_blank" rel="noopener">EC 132/2023</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer__bottom">
+      <p>© <span id="year">2026</span> Reforma Tributária. Conteúdo informativo — não constitui consultoria jurídica ou contábil.</p>
+      <p>Última revisão editorial: agosto de 2026</p>
+    </div>
+  </footer>
+
+</div>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
