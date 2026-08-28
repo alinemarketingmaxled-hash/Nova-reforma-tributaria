@@ -55,6 +55,32 @@
   --sh-3:0 20px 64px rgba(0,0,0,.55);
 }
 
+/* mesmo conjunto de tokens quando o visitante não fez escolha explícita
+   e o sistema dele está no escuro — o site já nasce correto, sem esperar o JS */
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+  --bg:#0a0a0b;
+    --bg-tint:#0f0f11;
+    --surface:#151517;
+    --surface-2:#1b1b1e;
+    --dark:#1f1f23;
+    --dark-2:#2a2a2f;
+    --ink:#f4f4f2;
+    --ink-2:#a4a4ac;
+    --ink-3:#71717a;
+    --line:rgba(244,244,242,.11);
+    --line-2:rgba(244,244,242,.07);
+    --inv:#f6f6f4;
+    --inv-2:rgba(246,246,244,.66);
+    --inv-3:rgba(246,246,244,.38);
+    --inv-line:rgba(246,246,244,.15);
+    --sh-1:0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+    --sh-2:0 2px 6px rgba(0,0,0,.45), 0 14px 38px rgba(0,0,0,.4);
+    --sh-3:0 20px 64px rgba(0,0,0,.55);
+  }
+}
+
+
 /* ---------- 2. base ---------- */
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:104px;-webkit-text-size-adjust:100%}

@@ -26,8 +26,9 @@ function brlShort(v){
 (() => {
   const root = document.documentElement;
   const stored = (() => { try { return localStorage.getItem('rt-tema'); } catch { return null; } })();
+  const marcado = root.dataset.theme;                 // tema já imposto pelo contexto
   const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  root.dataset.theme = stored || (prefers ? 'dark' : 'light');
+  root.dataset.theme = stored || marcado || (prefers ? 'dark' : 'light');
 
   $('#themeToggle')?.addEventListener('click', () => {
     root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
