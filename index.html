@@ -450,7 +450,7 @@
           </div>
 
           <div class="field">
-            <label for="dExport">Quanto da receita vem de exportação <b id="vdExport">0%</b></label>
+            <label for="dExport"><span>Quanto da receita vem de exportação</span><b id="vdExport">0%<em id="rdExport"></em></b></label>
             <input id="dExport" class="range" type="range" min="0" max="100" step="1" value="0">
             <p class="hint">A exportação é desonerada de IBS e CBS, e o crédito dos insumos
               usados nela é mantido e ressarcível.</p>
@@ -479,35 +479,35 @@
           </div>
 
           <div class="field">
-            <label for="dMargem">Margem líquida atual <b id="vdMargem">10%</b></label>
+            <label for="dMargem"><span>Margem líquida atual</span><b id="vdMargem">10%<em id="rdMargem"></em></b></label>
             <input id="dMargem" class="range" type="range" min="1" max="60" step="0.5" value="10">
             <p class="hint">O que sobra depois de todos os custos e despesas. Serve para medir
               quanto da sua margem a variação de carga consome.</p>
           </div>
 
           <div class="field">
-            <label for="dInsumos">Quanto da receita vai para fornecedores <b id="vdInsumos">45%</b></label>
+            <label for="dInsumos"><span>Quanto da receita vai para fornecedores</span><b id="vdInsumos">45%<em id="rdInsumos"></em></b></label>
             <input id="dInsumos" class="range" type="range" min="0" max="90" step="1" value="45">
             <p class="hint">Mercadorias, matéria-prima, fretes, softwares, energia, aluguel:
               tudo que vem de outra empresa com nota. É daqui que nasce o seu crédito.</p>
           </div>
 
           <div class="field">
-            <label for="dFornSimples">Desses fornecedores, quantos são do Simples ou informais <b id="vdFornSimples">20%</b></label>
+            <label for="dFornSimples"><span>Desses fornecedores, quantos são do Simples ou informais</span><b id="vdFornSimples">20%<em id="rdFornSimples"></em></b></label>
             <input id="dFornSimples" class="range" type="range" min="0" max="100" step="1" value="20">
             <p class="hint">Fornecedor no Simples transfere crédito reduzido e fornecedor sem
               nota não transfere nada. Essa parcela derruba o seu crédito efetivo.</p>
           </div>
 
           <div class="field">
-            <label for="dFolha">Quanto da receita vai para folha de pagamento <b id="vdFolha">25%</b></label>
+            <label for="dFolha"><span>Quanto da receita vai para folha de pagamento</span><b id="vdFolha">25%<em id="rdFolha"></em></b></label>
             <input id="dFolha" class="range" type="range" min="0" max="80" step="1" value="25">
             <p class="hint">Salários e encargos não geram crédito de IBS e CBS. Quanto maior a
               folha em relação à receita, maior a exposição à alíquota cheia.</p>
           </div>
 
           <div class="field">
-            <label for="dPrazo">Prazo médio de recebimento <b id="vdPrazo">30 dias</b></label>
+            <label for="dPrazo"><span>Prazo médio de recebimento</span><b id="vdPrazo">30 dias<em id="rdPrazo"></em></b></label>
             <input id="dPrazo" class="range" type="range" min="0" max="120" step="5" value="30">
             <p class="hint">Com split payment o imposto sai no recebimento, e não mais no
               vencimento da guia. Quanto menor o prazo, mais cedo o dinheiro deixa o caixa.</p>
@@ -518,14 +518,14 @@
           <legend><span class="fs__n">3</span> Ajuste fino</legend>
 
           <div class="field">
-            <label for="dAtual">Carga atual sobre consumo <b id="vdAtual">9,25%</b></label>
+            <label for="dAtual"><span>Carga atual sobre consumo</span><b id="vdAtual">9,25%<em id="rdAtual"></em></b></label>
             <input id="dAtual" class="range" type="range" min="0" max="30" step="0.25" value="9.25">
             <p class="hint">PIS, Cofins, ICMS e ISS efetivamente pagos, como percentual da
               receita. Preenchemos por regime e setor, ajuste com o seu número real.</p>
           </div>
 
           <div class="field">
-            <label for="dNova">Alíquota IBS e CBS aplicável <b id="vdNova">26,5%</b></label>
+            <label for="dNova"><span>Alíquota IBS e CBS aplicável</span><b id="vdNova">26,5%<em id="rdNova"></em></b></label>
             <input id="dNova" class="range" type="range" min="0" max="30" step="0.05" value="26.5">
             <p class="hint" id="dNovaHint">Carregando…</p>
           </div>

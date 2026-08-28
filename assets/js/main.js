@@ -264,6 +264,11 @@ function brlShort(v){
     forn:$('#dFornSimples'), folha:$('#dFolha'), prazo:$('#dPrazo'),
     atual:$('#dAtual'), nova:$('#dNova'), benef:$('#dBenef'), split:$('#dSplit')
   };
+  /* cada percentual do questionário carrega o valor em reais que ele representa */
+  const val = id => $('#rd' + id);
+  const mostra = (id, reais, sufixo = 'por mês') => {
+    val(id).textContent = reais === null ? '' : `${brl.format(reais)} ${sufixo}`;
+  };
   const AJUSTAVEIS = ['ins','folha','atual','nova','forn','prazo','margem'];
   let tocou = {};
 
@@ -304,14 +309,33 @@ function brlShort(v){
     const fed    = SETOR[el.setor.value].fed;
 
     /* rótulos ao vivo */
-    $('#vdExport').textContent      = el.export.value + '%';
-    $('#vdInsumos').textContent     = el.ins.value + '%';
-    $('#vdFornSimples').textContent = el.forn.value + '%';
-    $('#vdFolha').textContent       = folha + '%';
-    $('#vdMargem').textContent      = pct(margem);
-    $('#vdPrazo').textContent       = prazo === 0 ? 'à vista' : prazo + ' dias';
-    $('#vdAtual').textContent       = pct(atual);
-    $('#vdNova').textContent        = pct(aliq);
+    const põe = (id, txt) => { const e = $('#vd' + id); e.firstChild.nodeValue = txt; };
+    põe('Export',      el.export.value + '%');
+    põe('Insumos',     el.ins.value + '%');
+    põe('FornSimples', el.forn.value + '%');
+    põe('Folha',       folha + '%');
+    põe('Margem',      pct(margem));
+    põe('Prazo',       prazo === 0 ? 'à vista' : prazo + ' dias');
+    põe('Atual',       pct(atual));
+    põe('Nova',        pct(aliq));
+
+    /* o que cada percentual vale em dinheiro, para a conta ficar concreta */
+    const gastoInsumos = mes * ins;
+    if (!fat){
+      ['Export','Insumos','FornSimples','Folha','Margem','Prazo','Atual','Nova']
+        .forEach(id => mostra(id, null));
+    } else {
+      mostra('Export',      mes * exp);
+      mostra('Insumos',     gastoInsumos);
+      mostra('FornSimples', gastoInsumos * forn);
+      mostra('Folha',       mes * folha / 100);
+      mostra('Margem',      mes * margem / 100);
+      mostra('Atual',       mes * atual / 100);
+      mostra('Nova',        mes * (1 - exp) * aliq / 100, 'de débito');
+      val('Prazo').textContent = prazo === 0
+        ? 'recebe na hora'
+        : `${brl.format(mes * prazo / 30)} a receber`;
+    }
     $('#dFatHint').textContent = fat ? `${brl.format(mes)} por mês, ${porte(fat)}` : 'Informe o faturamento para calcular.';
     $('#dClienteHint').textContent = cli.nota;
 

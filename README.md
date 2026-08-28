@@ -42,6 +42,12 @@ quanto vai para folha de pagamento e prazo médio de recebimento.
 **Ajuste fino:** carga atual sobre consumo, alíquota de IBS e CBS aplicável, uso de
 benefício de ICMS e se o split payment deve entrar na conta do caixa.
 
+Todo controle percentual mostra, ao lado da porcentagem, o valor em reais por mês que ela
+representa, calculado sobre o faturamento informado. Assim "22% para fornecedores" aparece
+junto de "R$ 110.000 por mês", e a parcela de fornecedores do Simples é medida sobre o
+gasto com fornecedores, não sobre a receita. O prazo de recebimento mostra quanto fica em
+contas a receber.
+
 ### O que ele devolve
 
 Variação da carga em pontos percentuais e em reais por ano, comparativo de hoje contra
