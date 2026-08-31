@@ -25,6 +25,7 @@
   <nav class="rail__nav">
     <a href="#inicio"      data-spy="inicio"      data-tip="Início"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg></a>
     <a href="#tributos"    data-spy="tributos"    data-tip="Os novos tributos"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg></a>
+    <a href="#split"       data-spy="split"       data-tip="Split payment"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8.5h4M15 8.5h4M5 15.5h4M15 15.5h4"/></svg></a>
     <a href="#cronograma"  data-spy="cronograma"  data-tip="Cronograma"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></a>
     <a href="#regimes"     data-spy="regimes"     data-tip="Regimes diferenciados"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h9"/></svg></a>
     <a href="#impactos"    data-spy="impactos"    data-tip="Impactos por setor"><svg viewBox="0 0 24 24"><path d="M4 19.5V12M10 19.5V5M16 19.5v-5.5M22 19.5h-20"/></svg></a>
@@ -44,6 +45,7 @@
     </a>
     <nav class="topnav" aria-label="Navegação principal">
       <a href="#tributos">Tributos</a>
+      <a href="#split">Split payment</a>
       <a href="#cronograma">Cronograma</a>
       <a href="#regimes">Regimes</a>
       <a href="#impactos">Impactos</a>
@@ -66,6 +68,7 @@
 
   <div class="mobilenav" id="mobilenav" hidden>
     <a href="#tributos">Os novos tributos</a>
+    <a href="#split">Como funciona o split payment</a>
     <a href="#cronograma">Cronograma 2026 a 2033</a>
     <a href="#regimes">Regimes diferenciados</a>
     <a href="#impactos">Impactos por setor</a>
@@ -247,8 +250,116 @@
     </div>
   </section>
 
+
+  <!-- ══════════ SPLIT PAYMENT ══════════ -->
+  <section class="section section--tinted" id="split">
+    <header class="section__head">
+      <p class="eyebrow"><span class="dot"></span> Mecânica</p>
+      <h2 class="h2">Como funciona o split payment</h2>
+      <p class="section__lede">
+        A pergunta que sempre aparece: se eu vendo parcelado em 30, 40 e 60 dias, como o
+        sistema sabe quanto reter em cada parcela? A resposta é que o split não olha o
+        prazo, ele olha a <b>liquidação</b>. Cada vez que o dinheiro entra, uma fatia
+        proporcional do imposto é separada antes de chegar em você.
+      </p>
+    </header>
+
+    <div class="grid-2 grid-2--split">
+      <article class="card sp__steps">
+        <header class="card__head"><h3>O caminho de uma venda</h3><span class="tag">6 etapas</span></header>
+        <ol class="steps">
+          <li><b>Você emite a nota</b>
+            IBS e CBS saem destacados, por fora do preço, e o documento recebe a sua chave de acesso.</li>
+          <li><b>O fisco registra o documento</b>
+            A Receita Federal para a CBS e o Comitê Gestor para o IBS passam a saber exatamente
+            quanto de imposto está vinculado àquela chave.</li>
+          <li><b>A cobrança carrega a referência da nota</b>
+            É este o elo que faltava no sistema antigo: o boleto, o PIX ou a transação de cartão
+            saem identificados com o documento fiscal que originou a venda.</li>
+          <li><b>Na liquidação, o pagador consulta</b>
+            Banco, adquirente ou provedor de PIX pergunta ao sistema quanto reter daquele
+            pagamento específico, no instante em que ele acontece.</li>
+          <li><b>O sistema responde com o valor</b>
+            Na modalidade inteligente ele já considera os seus créditos e o seu saldo, então pode
+            mandar reter menos do que o valor destacado na nota.</li>
+          <li><b>A separação acontece</b>
+            O imposto vai direto para o fisco e só o líquido é creditado na sua conta. Você nunca
+            chega a ter aquele dinheiro.</li>
+        </ol>
+      </article>
+
+      <div class="sp__notes">
+        <article class="card card--note">
+          <div class="note__ic"><svg viewBox="0 0 24 24"><path d="M12 3v18M7 7.5h7.5a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h8"/></svg></div>
+          <h3>Parcelou? O imposto se divide junto</h3>
+          <p>O total de imposto da venda não muda por causa do parcelamento. O que muda é
+            <b>quando</b> ele sai. Em uma venda 30/40/60, cada uma das três liquidações carrega
+            um terço do imposto, porque cada uma carrega um terço do valor. Se as parcelas forem
+            desiguais, a retenção acompanha o tamanho de cada uma.</p>
+        </article>
+        <article class="card card--note">
+          <div class="note__ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg></div>
+          <h3>Prazo longo pode até ajudar</h3>
+          <p>Hoje o imposto de uma venda entra na apuração do mês e é pago no vencimento da guia,
+            algo em torno de 50 dias depois. Com split, ele sai em cada recebimento. Vender à
+            vista antecipa muito a saída; vender a 60 dias faz o imposto sair <b>depois</b> do que
+            sairia pela guia. O aperto de caixa é maior justamente para quem recebe rápido.</p>
+        </article>
+        <article class="card card--note">
+          <div class="note__ic"><svg viewBox="0 0 24 24"><path d="M4.5 6.5h15v11h-15z"/><path d="M4.5 10.5h15"/><path d="M8 14.5h3"/><path d="m19 19-14-14"/></svg></div>
+          <h3>Quando o split não acontece</h3>
+          <p>Se o pagamento não puder ser amarrado ao documento fiscal, não há o que separar.
+            Dinheiro em espécie e meios não integrados ficam de fora, e nesses casos o imposto
+            volta para a apuração normal, recolhido por guia. A regulamentação ainda está
+            detalhando o alcance de cada meio de pagamento.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- simulador de parcelamento -->
+    <article class="card sp__sim">
+      <header class="card__head">
+        <h3>Simule o seu parcelamento</h3>
+        <span class="tag">retenção parcela a parcela</span>
+      </header>
+      <p class="metric__sub sp__intro">Informe o valor da mercadoria ou do serviço, a alíquota
+        aplicável e os prazos de cada parcela. Escreva os prazos em dias, separados por barra,
+        como <b>30/40/60</b>. Para venda à vista, escreva <b>0</b>.</p>
+
+      <form class="sp__form" id="spForm" novalidate>
+        <div class="field">
+          <label for="spValor"><span>Valor da venda, sem o imposto</span></label>
+          <div class="input-wrap"><span class="prefix">R$</span>
+            <input id="spValor" type="text" inputmode="numeric" value="30.000">
+          </div>
+        </div>
+        <div class="field">
+          <label for="spAliq"><span>Alíquota IBS e CBS</span><b id="spAliqV">26,5%</b></label>
+          <input id="spAliq" class="range" type="range" min="0" max="30" step="0.05" value="26.5">
+        </div>
+        <div class="field">
+          <label for="spParc"><span>Prazos das parcelas, em dias</span></label>
+          <input id="spParc" type="text" value="30/40/60" spellcheck="false">
+          <p class="hint" id="spParcHint">3 parcelas</p>
+        </div>
+      </form>
+
+      <div class="tablewrap sp__tablewrap">
+        <table class="tbl sp__tbl">
+          <thead><tr>
+            <th>Liquidação</th><th>Parcela</th><th>Imposto retido</th><th>Você recebe</th>
+          </tr></thead>
+          <tbody id="spBody"></tbody>
+          <tfoot id="spFoot"></tfoot>
+        </table>
+      </div>
+
+      <p class="sp__verdict" id="spVerdict"></p>
+    </article>
+  </section>
+
   <!-- ══════════ CRONOGRAMA ══════════ -->
-  <section class="section section--tinted" id="cronograma">
+  <section class="section" id="cronograma">
     <header class="section__head">
       <p class="eyebrow"><span class="dot"></span> Linha do tempo</p>
       <h2 class="h2">Do ano-teste ao sistema pleno</h2>
@@ -299,7 +410,7 @@
   </section>
 
   <!-- ══════════ REGIMES ══════════ -->
-  <section class="section" id="regimes">
+  <section class="section section--tinted" id="regimes">
     <header class="section__head">
       <p class="eyebrow"><span class="dot"></span> Enquadramento</p>
       <h2 class="h2">Nem todo mundo paga a alíquota cheia</h2>
@@ -369,7 +480,7 @@
   </section>
 
   <!-- ══════════ IMPACTOS ══════════ -->
-  <section class="section section--tinted" id="impactos">
+  <section class="section" id="impactos">
     <header class="section__head">
       <p class="eyebrow"><span class="dot"></span> Leitura setorial</p>
       <h2 class="h2">O efeito não é o mesmo para todo mundo</h2>
@@ -395,7 +506,7 @@
   </section>
 
   <!-- ══════════ RAIO-X ══════════ -->
-  <section class="section" id="diagnostico">
+  <section class="section section--tinted" id="diagnostico">
     <header class="section__head">
       <p class="eyebrow"><span class="dot"></span> Ferramenta · o seu caso</p>
       <h2 class="h2">Raio-X do seu negócio</h2>
@@ -609,7 +720,7 @@
   </section>
 
   <!-- ══════════ CHECKLIST ══════════ -->
-  <section class="section section--tinted" id="checklist">
+  <section class="section" id="checklist">
     <header class="section__head">
       <p class="eyebrow"><span class="dot"></span> Plano de ação</p>
       <h2 class="h2">Checklist de adequação</h2>
@@ -654,7 +765,7 @@
   </section>
 
   <!-- ══════════ GLOSSÁRIO ══════════ -->
-  <section class="section" id="glossario">
+  <section class="section section--tinted" id="glossario">
     <header class="section__head">
       <p class="eyebrow"><span class="dot"></span> Vocabulário</p>
       <h2 class="h2">Glossário da reforma</h2>
@@ -670,7 +781,7 @@
   </section>
 
   <!-- ══════════ FAQ ══════════ -->
-  <section class="section section--tinted" id="faq">
+  <section class="section" id="faq">
     <header class="section__head">
       <p class="eyebrow"><span class="dot"></span> Dúvidas frequentes</p>
       <h2 class="h2">O que mais perguntam</h2>
@@ -760,6 +871,7 @@
         <div>
           <h4>Conteúdo</h4>
           <a href="#tributos">Os novos tributos</a>
+          <a href="#split">Split payment</a>
           <a href="#cronograma">Cronograma</a>
           <a href="#regimes">Regimes diferenciados</a>
           <a href="#impactos">Impactos por setor</a>

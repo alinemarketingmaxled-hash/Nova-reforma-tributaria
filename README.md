@@ -11,6 +11,7 @@ Estático, sem build e sem dependências: HTML, CSS e JavaScript puros.
 |---|---|
 | **Hero e bento** | Panorama em cartões: avanço da transição, alíquota de referência, o que substitui o quê, onde a regra está escrita |
 | **Os novos tributos** | CBS, IBS e Imposto Seletivo, mais os quatro conceitos estruturais: não cumulatividade plena, split payment, cobrança no destino e cashback |
+| **Split payment** | As seis etapas do caminho de uma venda, mais um simulador de parcelamento que mostra a retenção parcela a parcela |
 | **Cronograma** | Linha do tempo de 2026 a 2033, destacando o ano corrente |
 | **Regimes diferenciados** | Tabela das faixas de alíquota: zero, redução de 60%, redução de 30%, regime geral, regimes específicos e Simples Nacional |
 | **Impactos por setor** | Painel com abas para oito setores, cada um com medidores e pontos de atenção |
@@ -84,6 +85,21 @@ ajustados à mão deixam de ser sobrescritos quando o visitante troca de setor, 
 > fornecedor e as particularidades de cada regime específico. Os percentuais de referência
 > (26,5% no regime geral, 18,55% e 10,6% nas reduções de 30% e 60%) são estimativas, e a
 > alíquota definitiva será fixada por lei ordinária.
+
+## O simulador de parcelamento
+
+Responde à pergunta prática: em uma venda 30/40/60, quanto o split retém em cada parcela.
+
+```
+imposto  = valor × alíquota          # o imposto vai por fora do preço
+total    = valor + imposto
+fatia    = imposto ÷ total           # proporção de imposto em cada real cobrado
+retido   = parcela × fatia           # em cada liquidação
+```
+
+O campo de prazos aceita `30/40/60`, `30 40 60`, `30,40,60` e `0` para venda à vista.
+O veredito compara o momento médio de saída do imposto com os cerca de 50 dias que a guia
+de hoje leva para vencer, e é por isso que prazo longo pode favorecer o caixa.
 
 ## Estrutura
 

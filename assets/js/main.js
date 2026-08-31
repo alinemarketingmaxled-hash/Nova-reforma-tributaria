@@ -527,6 +527,94 @@ function brlShort(v){
   preencher(true); mascara(); calcular();
 })();
 
+/* ─────────────── 5b. simulador de parcelamento no split ─────────────── */
+(() => {
+  const form = $('#spForm');
+  if (!form) return;
+
+  const elValor = $('#spValor'), elAliq = $('#spAliq'), elParc = $('#spParc');
+  const corpo = $('#spBody'), rodape = $('#spFoot'), veredito = $('#spVerdict');
+
+  /* Sem split, o imposto de uma venda entra na apuração do mês e é pago no
+     vencimento da guia. Na média, isso fica em torno de 50 dias após a venda. */
+  const DIAS_GUIA = 50;
+
+  const digitos = t => (t || '').replace(/\D/g, '');
+  function mascara(){
+    const v = digitos(elValor.value).slice(0, 12);
+    elValor.value = v ? Number(v).toLocaleString('pt-BR') : '';
+  }
+
+  /* aceita "30/40/60", "30 40 60", "30,40,60" e "0" para à vista */
+  function prazos(){
+    return (elParc.value || '')
+      .split(/[^\d]+/)
+      .filter(t => t !== '')
+      .map(Number)
+      .filter(n => Number.isFinite(n) && n >= 0 && n <= 720)
+      .slice(0, 24);
+  }
+
+  function calcular(){
+    mascara();
+    const base = Number(digitos(elValor.value) || 0);
+    const aliq = +elAliq.value;
+    const dias = prazos();
+
+    $('#spAliqV').textContent = pct(aliq);
+    $('#spParcHint').textContent = dias.length === 0 ? 'informe ao menos um prazo'
+      : dias.length === 1 ? (dias[0] === 0 ? 'à vista' : 'parcela única')
+      : `${dias.length} parcelas`;
+
+    if (!base || dias.length === 0){
+      corpo.innerHTML = '<tr class="sp__erro"><td colspan="4">Informe o valor da venda e ao menos um prazo para ver a divisão.</td></tr>';
+      rodape.innerHTML = '';
+      veredito.textContent = '';
+      return;
+    }
+
+    const imposto = base * aliq / 100;
+    const total   = base + imposto;              // o imposto vai por fora do preço
+    const fatia   = total > 0 ? imposto / total : 0;
+    const parcela = total / dias.length;
+
+    corpo.innerHTML = dias.map((d, i) => {
+      const retido = parcela * fatia;
+      return `<tr>
+        <td>${d === 0 ? 'à vista' : 'dia ' + d}</td>
+        <td>${brl.format(parcela)}</td>
+        <td class="sp__ret">${brl.format(retido)}</td>
+        <td>${brl.format(parcela - retido)}</td>
+      </tr>`;
+    }).join('');
+
+    rodape.innerHTML = `<tr>
+      <td>Total</td><td>${brl.format(total)}</td>
+      <td>${brl.format(imposto)}</td><td>${brl.format(base)}</td>
+    </tr>`;
+
+    /* Momento médio de saída do imposto, ponderado pelo valor de cada parcela.
+       Como as parcelas são iguais, é a média simples dos prazos.            */
+    const medio = dias.reduce((a, b) => a + b, 0) / dias.length;
+    const dif   = DIAS_GUIA - medio;
+    const giro  = imposto * Math.max(0, dif) / 30;
+
+    const quando = medio === 0
+      ? 'sai do seu caixa <b>no ato do recebimento</b>'
+      : `sai do seu caixa em média <b>${Math.round(medio)} dias</b> após a venda`;
+
+    veredito.innerHTML = dif > 2
+      ? `Com esses prazos, o imposto ${quando}, contra cerca de ${DIAS_GUIA} dias pela guia de hoje. São <b>${Math.round(dif)} dias de antecipação</b>, o equivalente a ${brl.format(giro)} a mais de capital de giro nesta operação.`
+      : dif < -2
+      ? `Com esses prazos, o imposto sai em média <b>${Math.round(medio)} dias</b> após a venda, ou seja <b>${Math.round(-dif)} dias depois</b> do que sairia pela guia de hoje. Neste caso o split trabalha a favor do seu caixa.`
+      : `Com esses prazos, o imposto sai em média <b>${Math.round(medio)} dias</b> após a venda, praticamente o mesmo momento em que venceria a guia de hoje. O efeito no caixa é neutro.`;
+  }
+
+  [elValor, elAliq, elParc].forEach(e => e.addEventListener('input', calcular));
+  form.addEventListener('submit', e => e.preventDefault());
+  calcular();
+})();
+
 /* ─────────────── 6. checklist ─────────────── */
 (() => {
   const lista = $('#ckList');
