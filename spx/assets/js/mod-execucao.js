@@ -51,7 +51,7 @@ function telaQualidade(o) {
 
   pintar(`
     <div class="grid g-3" style="margin-bottom:16px">
-      ${kpi('Inspeções aprovadas', taxa === null ? '—' : taxa + '%', `${o.inspecoes.length} inspeção(ões) realizadas`)}
+      ${kpi('Inspeções aprovadas', taxa === null ? '-' : taxa + '%', `${o.inspecoes.length} inspeção(ões) realizadas`)}
       ${kpi('NC abertas', abertas.length, abertas.length ? 'aguardando correção' : 'nada pendente')}
       ${kpi('NC vencidas', abertas.filter(n => n.prazo < hoje()).length, 'passaram do prazo de ação')}
     </div>
@@ -495,7 +495,7 @@ function telaSSMA(o) {
   pintar(`
     <div class="grid g-4" style="margin-bottom:16px">
       ${kpi('Dias sem acidente', diasSemAcidente(o), 'desde o início da obra')}
-      ${kpi('Conformidade NR', conf === null ? '—' : conf + '%', `${s.checklists.length} verificação(ões)`)}
+      ${kpi('Conformidade NR', conf === null ? '-' : conf + '%', `${s.checklists.length} verificação(ões)`)}
       ${kpi('DDS no mês', noMes, 'diálogos de segurança')}
       ${kpi('Resíduos destinados', volume + ' m³', 'com CDF emitido')}
     </div>
@@ -604,7 +604,7 @@ function registrarSSMA(o, aba) {
           id: uid('res'), classe: $('#sClasse', bg).value,
           volume: Number($('#sVol', bg).value || 0), data: $('#sData', bg).value,
           destinacao: $('#sDest', bg).value.trim() || 'Receptor licenciado',
-          cdf: $('#sCdf', bg).value.trim() || '—',
+          cdf: $('#sCdf', bg).value.trim() || '-',
         });
         DB.salvar(); f(); aviso('Destinação registrada.'); App.rotear();
       } },

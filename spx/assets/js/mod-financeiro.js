@@ -35,7 +35,7 @@ function telaFinanceiro(o) {
       <div class="card__head">${icone('dinheiro')}<h2>Contrato</h2></div>
       <div class="obra-card__meta" style="font-size:13.5px">
         <span class="row"><span>Valor original</span><b>${moeda(contrato)}</b></span>
-        <span class="row"><span>Aditivos aprovados</span><b>${aditivos ? '+ ' + moeda(aditivos) : '—'}</b></span>
+        <span class="row"><span>Aditivos aprovados</span><b>${aditivos ? '+ ' + moeda(aditivos) : '-'}</b></span>
         <span class="row" style="border-top:1px solid var(--line-2);padding-top:8px">
           <span><b>Valor atualizado</b></span><b style="font-size:16px">${moeda(atualizado)}</b></span>
       </div>

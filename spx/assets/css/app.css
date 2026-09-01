@@ -241,9 +241,10 @@ svg:not(.donut):not(.chart__svg):not(.lg__m){width:18px;height:18px;flex:none}
 .btn--block{width:100%}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;min-width:0}
+.card h2,.card h3,.card p,.card li{overflow-wrap:anywhere}
 .card--flat{box-shadow:none}
-.card__head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.card__head{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .card__head h2,.card__head h3{font-size:15px;font-weight:600;letter-spacing:-.01em;flex:1;min-width:0}
 .card__head .btn{margin-left:auto}
 
@@ -259,7 +260,7 @@ svg:not(.donut):not(.chart__svg):not(.lg__m){width:18px;height:18px;flex:none}
 .sec-t:first-child{margin-top:0}
 
 .tag{
-  display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;
+  display:inline-flex;align-items:center;gap:5px;max-width:100%;font-size:11.5px;font-weight:600;
   padding:3px 9px;border-radius:99px;background:color-mix(in srgb, var(--ink) 6%, transparent);color:var(--ink-2);
   letter-spacing:.01em;white-space:nowrap;
 }
@@ -314,7 +315,8 @@ svg:not(.donut):not(.chart__svg):not(.lg__m){width:18px;height:18px;flex:none}
 .obra-card__h p{font-size:12.5px;color:var(--muted)}
 .obra-card__b{display:flex;align-items:center;gap:16px}
 .obra-card__meta{flex:1;display:grid;gap:9px;font-size:12.5px;color:var(--muted)}
-.obra-card__meta .row{display:flex;justify-content:space-between;gap:8px}
+.obra-card__meta .row{display:flex;justify-content:space-between;gap:10px;min-width:0}
+.obra-card__meta .row b{overflow-wrap:anywhere}
 .obra-card__meta b{color:var(--ink);font-weight:600}
 
 /* Timeline semanal */
@@ -468,7 +470,8 @@ input[type=range]{width:100%;accent-color:var(--ink);height:22px}
 .modal{background:var(--surface);border-radius:var(--r-xl);width:min(560px,100%);box-shadow:var(--shadow-lg);max-height:90dvh;display:flex;flex-direction:column;margin:auto}
 .modal__h{padding:20px 22px 0;display:flex;align-items:center;gap:12px}
 .modal__h h3{font-size:17px;font-weight:600;letter-spacing:-.02em;flex:1}
-.modal__b{padding:18px 22px;overflow-y:auto}
+.modal__b{padding:18px 22px;overflow-y:auto;min-width:0}
+.modal__b h3,.modal__b p,.modal__b b{overflow-wrap:anywhere}
 .modal__f{padding:0 22px 20px;display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}
 .x-btn{background:none;border:0;cursor:pointer;padding:6px;border-radius:8px;color:var(--muted)}
 .x-btn:hover{background:color-mix(in srgb, var(--ink) 6%, transparent)}
@@ -529,7 +532,7 @@ input[type=range]{width:100%;accent-color:var(--ink);height:22px}
 
 /* ============================================================
    Celular em primeiro lugar: abas na base, folha deslizante,
-   grade de módulos — e os gráficos dos módulos de gestão.
+   grade de módulos e os gráficos dos módulos de gestão.
    ============================================================ */
 
 /* ─── barra de abas ───────────────────────────────────────── */
@@ -766,3 +769,30 @@ input[type=range]{width:100%;accent-color:var(--ink);height:22px}
 .tema.is-on{border-color:var(--ink);box-shadow:0 0 0 2px color-mix(in srgb, var(--ink) 12%, transparent)}
 .tema__p{width:100%;height:34px;border-radius:9px;border:1px solid var(--line);overflow:hidden;display:flex}
 .tema__p i{flex:1}
+
+/* ─── contratos e assinaturas ─────────────────────────────── */
+.assin.is-assinado{border-color:color-mix(in srgb, var(--ok) 35%, transparent)}
+.clausulas{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:9px}
+.clausulas li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--ink-2);line-height:1.45}
+.clausulas svg{width:16px;height:16px;flex:none;margin-top:2px;stroke:var(--ok)}
+
+.carimbo{
+  display:flex;gap:12px;align-items:center;margin-top:14px;padding:13px;
+  border-radius:var(--r);background:var(--ok-soft);border:1px solid color-mix(in srgb, var(--ok) 28%, transparent);
+}
+.carimbo__i{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--surface);color:var(--ok)}
+.carimbo b{display:block;font-size:13.5px;color:var(--ok-ink)}
+.carimbo span{display:block;font-size:12px;color:var(--ok-ink);opacity:.85}
+
+.comprovante{border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;background:var(--surface-2)}
+.comprovante__t{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.comprovante h3{font-size:15.5px;font-weight:600;letter-spacing:-.015em}
+.comprovante__f{font-size:11.5px;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--line-2);line-height:1.5}
+
+.visto-barra{
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px;padding:14px;
+  border-radius:var(--r-lg);background:var(--surface-2);border:1px solid var(--line);
+}
+.visto-barra__t{flex:1;min-width:180px}
+.visto-barra__t b{display:block;font-size:13.5px}
+.visto-barra__t span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}

@@ -390,7 +390,7 @@ function telaRecursos(o) {
         tag: e.situacao === 'em_obra' ? '<span class="tag tag--ok">Em obra</span>'
            : e.situacao === 'manutencao' ? '<span class="tag tag--warn">Manutenção</span>'
            : '<span class="tag">Devolvido</span>',
-        valor: e.custo_mes ? moeda(e.custo_mes) : '—',
+        valor: e.custo_mes ? moeda(e.custo_mes) : '-',
         subvalor: e.custo_mes ? 'por mês' : 'próprio',
         acao: App.podeEditar() ? 'equip:' + e.id : '',
       })).join('')}

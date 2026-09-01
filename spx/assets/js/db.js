@@ -25,7 +25,7 @@ const difDias = (de, ate) => Math.round((dia(ate) - dia(de)) / 86400000);
 const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 
 const fmtData = (iso, longo = false) => {
-  if (!iso) return '—';
+  if (!iso) return '-';
   const d = dia(iso);
   return longo
     ? `${d.getDate()} de ${['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][d.getMonth()]} de ${d.getFullYear()}`
@@ -202,7 +202,7 @@ const DB = {
 
   /* usuários e sessão */
   usuario(id) { return this.dados.usuarios.find(u => u.id === id) || null; },
-  nome(id) { return (this.usuario(id) || {}).nome || '—'; },
+  nome(id) { return (this.usuario(id) || {}).nome || '-'; },
 
   entrar(email, senha) {
     const u = this.dados.usuarios.find(
@@ -233,7 +233,7 @@ const DB = {
   obra(id) { return this.dados.obras.find(o => o.id === id) || null; },
 
   fornecedor(id) { return (this.dados.fornecedores || []).find(f => f.id === id) || null; },
-  fornecedorNome(id) { return (this.fornecedor(id) || {}).nome || '—'; },
+  fornecedorNome(id) { return (this.fornecedor(id) || {}).nome || '-'; },
 };
 
 /* ─── cálculos de andamento ───────────────────────────────── */
@@ -717,7 +717,7 @@ function semear() {
     });
   });
 
-  obras.forEach(o => enriquecerObra(o, configGestao(o.id)));
+  obras.forEach(o => enriquecerObra(o, configGestao(o.id), usuarios));
 
   return {
     versao: 2,

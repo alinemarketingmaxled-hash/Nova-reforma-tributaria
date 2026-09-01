@@ -3,7 +3,7 @@
    Paleta conferida com o validador de contraste e daltonismo:
    severidade em três níveis (verde, âmbar, vermelho), uma cor
    só para valores, e o previsto sempre como linha tracejada
-   cinza — referência, não série.
+   cinza, que é referência e não série.
    ============================================================ */
 
 const COR_DADO = '#2a78d6';   /* valores medidos */
@@ -84,7 +84,7 @@ function curvaSGrafico(pontos, { moeda = false, titulo = '' } = {}) {
         <table>
           <thead><tr><th>Data</th><th>Previsto</th><th>Realizado</th></tr></thead>
           <tbody>${pontos.map(p => `<tr><td>${fmtData(p.data)}</td><td>${fmtCurto(p.previsto, moeda)}</td>
-            <td>${p.realizado === null || p.realizado === undefined ? '—' : fmtCurto(p.realizado, moeda)}</td></tr>`).join('')}</tbody>
+            <td>${p.realizado === null || p.realizado === undefined ? '-' : fmtCurto(p.realizado, moeda)}</td></tr>`).join('')}</tbody>
         </table>
       </div>
     </details>

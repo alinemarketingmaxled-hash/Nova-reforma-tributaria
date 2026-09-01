@@ -226,6 +226,44 @@ function configGestao(id) {
       ],
     },
 
+    contratos: [
+      { tipo: 'contrato', codigo: 'SPX-CT-2026-014', titulo: 'Contrato de prestação de serviços de engenharia',
+        descricao: 'Execução da reforma completa da residência, conforme projeto executivo e memorial descritivo, com fornecimento de mão de obra, material básico e administração de obra.',
+        valor: 1180000, emitido_em: s(24, 1), status: 'assinado', assinado_em: s(23, 2),
+        clausulas: [
+          'Prazo de execução de 180 dias corridos a partir da ordem de início',
+          'Pagamento em parcela de sinal de 15% e medições mensais do serviço executado',
+          'Material de acabamento fornecido pela contratante, conforme memorial',
+          'Garantia de 5 anos para estrutura e 1 ano para acabamentos',
+          'Multa de 0,5% por dia de atraso não justificado, limitada a 10% do contrato',
+        ] },
+      { tipo: 'ordem', codigo: 'SPX-OS-2026-014', titulo: 'Ordem de início de serviço',
+        descricao: 'Autorização para início dos trabalhos no endereço da obra, com a equipe cadastrada e o canteiro montado.',
+        valor: null, emitido_em: s(22, 1), status: 'assinado', assinado_em: s(22, 2),
+        clausulas: [
+          'Início dos serviços na data de emissão',
+          'Horário de trabalho das 8h às 17h, de segunda a sábado',
+          'Responsável técnico: Rafael Lima, CREA 5069481234',
+        ] },
+      { tipo: 'aditivo', codigo: 'SPX-AD-2026-014-01', titulo: 'Aditivo 01 · reforço estrutural da abertura da sala',
+        descricao: 'Serviço não previsto no contrato original, decorrente de viga encontrada fora da posição do projeto, com laudo do calculista anexado.',
+        valor: 9600, emitido_em: s(5, 1), status: 'assinado', assinado_em: s(4, 3),
+        clausulas: [
+          'Acréscimo de R$ 9.600,00 ao valor do contrato',
+          'Acréscimo de 2 dias ao prazo de execução',
+          'Execução conforme laudo do calculista de 12 de agosto',
+        ] },
+      { tipo: 'aditivo', codigo: 'SPX-AD-2026-014-02', titulo: 'Aditivo 02 · rodapé embutido de alumínio na área social',
+        descricao: 'Troca do rodapé pintado pelo perfil embutido de alumínio na área social, proposta pela arquitetura e aprovada em obra.',
+        valor: 12400, emitido_em: s(0, 1), status: 'aguardando', assinado_em: null,
+        clausulas: [
+          'Acréscimo de R$ 12.400,00 ao valor do contrato',
+          'Acréscimo de 3 dias ao prazo de execução',
+          'Fornecimento e instalação de 62 metros de perfil embutido',
+          'Execução após a conclusão do revestimento da área social',
+        ] },
+    ],
+
     aprovacoes: [
       { tipo: 'material', titulo: 'Amostra do rejunte cinza platina', descricao: 'Amostra aplicada em painel de 50x50 na obra, para conferir o tom com o porcelanato.',
         valor: null, solicitante: 'u_eng', aprovador: 'cliente', status: 'pendente', prazo: f(0, 2), criado_em: s(0, 1), decidido_em: null, decidido_por: null, comentario: '' },
@@ -332,6 +370,26 @@ function configGestao(id) {
       ocorrencias: [],
       residuos: [{ data: s(2, 3), classe: 'C', volume: 6, destinacao: 'Receptor licenciado de gesso', cdf: 'CDF-2026-4402' }],
     },
+    contratos: [
+      { tipo: 'contrato', codigo: 'SPX-CT-2026-021', titulo: 'Contrato de prestação de serviços de engenharia',
+        descricao: 'Execução do projeto de interiores da loja conceito, com fornecimento de mão de obra e administração de obra.',
+        valor: 740000, emitido_em: s(13, 1), status: 'assinado', assinado_em: s(12, 3),
+        clausulas: [
+          'Prazo de execução de 120 dias corridos',
+          'Trabalho em horário comercial, conforme regras do condomínio',
+          'Pagamento em sinal de 15% e medições mensais',
+          'Mobiliário e comunicação visual fora do escopo',
+        ] },
+      { tipo: 'ordem', codigo: 'SPX-OS-2026-021', titulo: 'Ordem de início de serviço',
+        descricao: 'Autorização de início após liberação do condomínio e apresentação de ART e seguro.',
+        valor: null, emitido_em: s(11, 1), status: 'assinado', assinado_em: s(11, 2),
+        clausulas: ['Início dos serviços na data de emissão', 'Carga e descarga conforme janela liberada pela administração'] },
+      { tipo: 'aditivo', codigo: 'SPX-AD-2026-021-01', titulo: 'Aditivo 01 · reposicionamento do balcão do caixa',
+        descricao: 'Demolição e reexecução de 3 m de alvenaria em razão da revisão 02 do projeto de layout.',
+        valor: 7300, emitido_em: s(2, 1), status: 'assinado', assinado_em: s(1, 4),
+        clausulas: ['Acréscimo de R$ 7.300,00 ao contrato', 'Acréscimo de 3 dias ao prazo'] },
+    ],
+
     aprovacoes: [
       { tipo: 'material', titulo: 'Cor da tinta epóxi do estoque', descricao: 'Confirmar entre o cinza N7 e o cinza chumbo para o piso do estoque.',
         valor: null, solicitante: 'u_eng', aprovador: 'arquiteto', status: 'pendente', prazo: f(0, 3), criado_em: s(0, 1), decidido_em: null, decidido_por: null, comentario: '' },
@@ -410,6 +468,30 @@ function configGestao(id) {
       ocorrencias: [],
       residuos: [{ data: s(0, 3), classe: 'A', volume: 14, destinacao: 'Aterro de resíduos da construção civil licenciado', cdf: 'CDF-2026-4468' }],
     },
+    contratos: [
+      { tipo: 'contrato', codigo: 'SPX-CT-2026-027', titulo: 'Contrato de prestação de serviços de engenharia',
+        descricao: 'Execução da reforma do apartamento conforme projeto de layout, com fornecimento de mão de obra e administração de obra.',
+        valor: 620000, emitido_em: s(7, 1), status: 'assinado', assinado_em: s(6, 2),
+        clausulas: [
+          'Prazo de execução de 150 dias corridos',
+          'Obra com o apartamento desocupado',
+          'Uso do elevador de serviço das 9h às 16h',
+          'Pagamento em sinal de 15% e medições mensais',
+        ] },
+      { tipo: 'ordem', codigo: 'SPX-OS-2026-027', titulo: 'Ordem de início de serviço',
+        descricao: 'Autorização de início após aprovação do plano de reforma pelo condomínio.',
+        valor: null, emitido_em: s(5, 1), status: 'assinado', assinado_em: s(5, 1),
+        clausulas: ['Início dos serviços na data de emissão', 'Plano de reforma aprovado conforme NBR 16280'] },
+      { tipo: 'aditivo', codigo: 'SPX-AD-2026-027-01', titulo: 'Aditivo 01 · regularização do contrapiso',
+        descricao: 'Regularização de 96 m² de contrapiso fora de nível, identificada após a demolição do piso de tacos.',
+        valor: 18400, emitido_em: s(0, 2), status: 'aguardando', assinado_em: null,
+        clausulas: [
+          'Acréscimo de R$ 18.400,00 ao contrato',
+          'Acréscimo de 4 dias ao prazo de execução',
+          'Argamassa autonivelante nas áreas com desnível acima de 2 cm',
+        ] },
+    ],
+
     aprovacoes: [
       { tipo: 'orcamento', titulo: 'Orçamento complementar da regularização do contrapiso', descricao: 'Regularização de 96 m² de contrapiso fora de nível, com impacto de 4 dias no cronograma.',
         valor: 18400, solicitante: 'u_eng', aprovador: 'cliente', status: 'pendente', prazo: f(0, 4), criado_em: s(0, 2), decidido_em: null, decidido_por: null, comentario: '' },

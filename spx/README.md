@@ -1,8 +1,8 @@
 # SPX Engenharia · Gestão de Obras
 
 Sistema para a SPX gerir obras junto com escritórios de arquitetura, feito para
-o celular: o engenheiro lança do canteiro, o arquiteto responde do escritório e
-o cliente acompanha do sofá. Três perfis leem a mesma obra de jeitos diferentes.
+uso no celular. Três perfis leem a mesma obra de jeitos diferentes: engenharia,
+arquitetura e cliente.
 
 Abra em `https://<seu-dominio>/spx/` (ou `spx/index.html`). Não precisa de
 instalação, servidor nem banco de dados.
@@ -19,27 +19,26 @@ A tela de entrada tem um atalho para cada um desses acessos.
 
 ## No celular
 
-A navegação fica em quatro abas embaixo — **Início, Semanas, Módulos e Conta** —
-com um botão central que abre as ações rápidas de quem está logado: o engenheiro
-registra relatório, inspeção, custo, estoque, DDS, pendência e pedido de
-aprovação sem procurar em menu. O tema acompanha o aparelho e pode ser fixado em
-claro ou escuro em **Conta → Aparência**. No computador a mesma coisa aparece
-como menu lateral.
+A navegação fica em quatro abas embaixo (**Início, Semanas, Módulos e Conta**),
+com um botão central que abre as ações rápidas de quem está logado. O engenheiro
+registra por ali relatório, inspeção, custo, estoque, DDS, pendência e pedido de
+aprovação. O tema acompanha o aparelho e pode ser fixado em claro ou escuro em
+**Conta → Aparência**. No computador a mesma navegação aparece como menu lateral.
 
 ## Módulos
 
-**Acompanhamento** — visão geral, semanas, fotos e pendências.
-**Planejamento** — cronograma, planejamento técnico, custos, recursos e riscos.
-**Execução** — qualidade, segurança e meio ambiente, documentação.
-**Suprimentos** — materiais e compras.
-**Gestão** — valores, aprovações, desempenho, equipe e contrato.
+**Acompanhamento**: visão geral, semanas, fotos e pendências.
+**Planejamento**: cronograma, planejamento técnico, custos, recursos e riscos.
+**Execução**: qualidade, segurança e meio ambiente, documentação.
+**Suprimentos**: materiais e compras.
+**Gestão**: contratos e assinaturas, valores, aprovações, desempenho, equipe.
 
 ### Cronograma
 
 Segue o formato que a SPX já usa no MS Project: **frentes de serviço com tarefas
 dentro**, cada tarefa com duração em dias, início, término, predecessora (término
 a início ou início a início, com defasagem) e responsável. A semana de obra tem
-seis dias — domingo não conta nas datas. O percentual da frente é a média das
+seis dias, e domingo não conta nas datas. O percentual da frente é a média das
 tarefas ponderada pela duração, e o da obra é a média das frentes.
 
 ### Relatório da semana
@@ -50,6 +49,19 @@ guardar; as tarefas previstas para a semana já abertas com controle deslizante;
 a pergunta “houve atraso?”, que registra motivo, dias perdidos e o responsável
 (clima, fornecedor, arquiteto, cliente, terceiros ou a própria SPX). Publicado, o
 relatório entra na linha do tempo e pode ser impresso ou salvo em PDF.
+
+### Contratos e assinaturas
+
+O cliente assina pelo aparelho o contrato, a ordem de início de serviço e cada
+aditivo. O documento aparece com o que está sendo contratado, o valor e as
+condições em lista; para assinar, o cliente confirma que leu e escreve o nome
+completo. A assinatura fica registrada com nome, perfil, data, hora e um código
+de verificação, e gera um comprovante que pode ser impresso ou salvo em PDF.
+
+Além disso, cada semana relatada tem o **visto do cliente**: um toque que
+confirma que ele leu o relatório daquela semana. O visto fica registrado com data
+e hora, aparece no cartão da semana e vira histórico de acompanhamento, útil
+quando alguém pergunta depois se determinada decisão foi comunicada.
 
 ### Valores
 
@@ -91,10 +103,10 @@ quem pediu, quem decide, prazo, decisão e comentário, com nome e data gravados
 ## Cores dos gráficos
 
 A paleta passou pelo validador de contraste e daltonismo, nos dois temas. O
-previsto é sempre uma linha tracejada cinza (referência, não série) e o realizado
-uma linha cheia azul. A severidade do risco tem três níveis, e não quatro, porque
-âmbar e laranja não se distinguem na tela nem para quem tem daltonismo. Todo
-gráfico traz um “ver os números” com a tabela equivalente.
+previsto é sempre uma linha tracejada cinza, que serve de referência e não de
+série. O realizado é uma linha cheia azul. A severidade do risco tem três níveis,
+e não quatro, porque âmbar e laranja não se distinguem na tela nem para quem tem
+daltonismo. Todo gráfico traz um "ver os números" com a tabela equivalente.
 
 ## Onde ficam os dados
 
@@ -127,6 +139,7 @@ spx/
         ├── mod-planejamento.js  cronograma, custos, recursos, riscos, escopo
         ├── mod-execucao.js      qualidade, documentação, segurança
         ├── mod-suprimentos.js   estoque e compras
+        ├── mod-assinaturas.js   contratos, assinatura e visto semanal
         ├── mod-financeiro.js    contrato, medições e pagamentos
         ├── mod-gestao.js        aprovações e desempenho
         └── app.js            login, estrutura, abas, rotas e painéis

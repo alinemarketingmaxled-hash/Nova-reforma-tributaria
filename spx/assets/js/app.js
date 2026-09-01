@@ -26,8 +26,9 @@ const MODULOS = [
   { id: 'materiais',     rota: 'materiais',     grupo: 'Suprimentos',    icone: 'caixa',     nome: 'Materiais',       desc: 'Estoque e rastreabilidade', papeis: ['engenheiro'] },
   { id: 'compras',       rota: 'compras',       grupo: 'Suprimentos',    icone: 'carrinho',  nome: 'Compras',         desc: 'Pedidos e fornecedores', papeis: ['engenheiro'] },
 
+  { id: 'assinaturas',   rota: 'assinaturas',   grupo: 'Gestão',         icone: 'assinar',   nome: 'Contratos',       desc: 'Assinatura e visto do cliente', papeis: ['engenheiro', 'cliente'] },
   { id: 'financeiro',    rota: 'financeiro',    grupo: 'Gestão',         icone: 'dinheiro',  nome: 'Valores',         desc: 'Contrato, medições e pagamentos', papeis: ['engenheiro', 'cliente'] },
-  { id: 'aprovacoes',    rota: 'aprovacoes',    grupo: 'Gestão',         icone: 'assinar',   nome: 'Aprovações',      desc: 'Decisões registradas', papeis: TODOS },
+  { id: 'aprovacoes',    rota: 'aprovacoes',    grupo: 'Gestão',         icone: 'ok',        nome: 'Aprovações',      desc: 'Decisões registradas', papeis: TODOS },
   { id: 'desempenho',    rota: 'desempenho',    grupo: 'Gestão',         icone: 'raio',      nome: 'Desempenho',      desc: 'Prazo, custo, qualidade e segurança', papeis: TODOS },
   { id: 'equipe',        rota: 'equipe',        grupo: 'Gestão',         icone: 'pessoas',   nome: 'Equipe e contrato', desc: 'Quem é quem na obra', papeis: TODOS },
 ];
@@ -41,6 +42,7 @@ const TELAS = {
   qualidade: telaQualidade, ssma: telaSSMA, documentos: telaDocumentos,
   materiais: telaMateriais, compras: telaCompras,
   aprovacoes: telaAprovacoes, desempenho: telaDesempenho, financeiro: telaFinanceiro,
+  assinaturas: telaAssinaturas,
 };
 
 /* Quantos itens desta obra pedem atenção de quem está logado. */
@@ -48,6 +50,9 @@ function contadorModulo(id, o, papel) {
   if (!o) return 0;
   if (id === 'pendencias') return pendenciasAbertas(o, papel).length;
   if (id === 'aprovacoes') return aprovacoesPendentes(o, papel).length;
+  if (id === 'assinaturas') {
+    return contratosAguardando(o, papel).length + (papel === 'cliente' ? semanasSemVisto(o) : 0);
+  }
   if (papel !== 'engenheiro') return 0;
   if (id === 'qualidade') return ncsAbertas(o).length;
   if (id === 'materiais') return materiaisEmFalta(o).length;
@@ -161,9 +166,9 @@ function telaLogin() {
       <div class="logo"><span class="logo__mark">SPX</span>
         <span class="logo__txt"><b>SPX Engenharia</b><span>Gestão de obras</span></span></div>
       <div class="login__pitch">
-        <h1>A obra inteira<br><em>na palma da mão</em>.</h1>
-        <p>Cronograma, custo, equipe, risco, qualidade, segurança, estoque e aprovação
-           no mesmo lugar em que a equipe conta o que aconteceu na semana.</p>
+        <h1>Gestão de obras<br><em>da SPX</em></h1>
+        <p>Cronograma, custo, valores, equipe, risco, qualidade, segurança, estoque e
+           aprovação no mesmo lugar em que a equipe registra a semana da obra.</p>
         <ul class="login__feats">
           <li>${icone('semana')}<span>Relatório semanal com fotos, efetivo e motivo de atraso</span></li>
           <li>${icone('grafico')}<span>Curva S, índice de prazo e índice de custo</span></li>
@@ -372,6 +377,7 @@ function acoesRapidas() {
     { ic: 'escudo', nome: 'Registrar DDS', desc: 'Diálogo diário de segurança', fn: () => registrarSSMA(o, 'dds') },
     { ic: 'alerta', nome: 'Abrir pendência', desc: 'Algo travando a obra', fn: () => formPendencia(o) },
     { ic: 'assinar', nome: 'Pedir aprovação', desc: 'Projeto, aditivo ou medição', fn: () => formAprovacao(o) },
+    { ic: 'doc', nome: 'Enviar para assinatura', desc: 'Contrato, ordem de serviço ou aditivo', fn: () => formDocumentoAssinatura(o) },
   ] : [
     { ic: 'assinar', nome: 'Ver o que espera por mim', desc: 'Aprovações pendentes', fn: () => App.ir(`#/obra/${o.id}/aprovacoes`) },
     { ic: 'alerta', nome: 'Abrir pendência', desc: 'Uma dúvida ou um pedido para a obra', fn: () => formPendencia(o) },
@@ -511,7 +517,7 @@ function cartaoObra(o) {
       <div class="obra-card__meta">
         <span class="row"><span>Previsto para hoje</span><b>${plan}%</b></span>
         <span class="row"><span>Prazo</span><b>${fmtData(o.prazo)}</b></span>
-        <span class="row"><span>Último relatório</span><b>${ult ? fmtPeriodo(ult.de, ult.ate) : '—'}</b></span>
+        <span class="row"><span>Último relatório</span><b>${ult ? fmtPeriodo(ult.de, ult.ate) : '-'}</b></span>
         <span class="row"><span>Pendências abertas</span><b>${pendenciasAbertas(o).length}</b></span>
       </div>
     </div>
@@ -642,7 +648,7 @@ function painelCliente(minhas) {
     { ic: 'semana', txt: 'Semanas', tinta: 'tt1', fn: () => App.ir(`#/obra/${o.id}/semanas`) },
     { ic: 'fotos', txt: 'Fotos', tinta: 'tt2', fn: () => App.ir(`#/obra/${o.id}/fotos`) },
     { ic: 'dinheiro', txt: 'Valores', tinta: 'tt3', fn: () => App.ir(`#/obra/${o.id}/financeiro`) },
-    { ic: 'assinar', txt: 'Aprovar', tinta: 'tt5', fn: () => App.ir(`#/obra/${o.id}/aprovacoes`) },
+    { ic: 'assinar', txt: 'Assinar', tinta: 'tt5', fn: () => App.ir(`#/obra/${o.id}/assinaturas`) },
   ];
 
   topo('A sua obra', esc(o.nome));
@@ -665,6 +671,15 @@ function painelCliente(minhas) {
             </div>
           </div>
         </div>
+
+        ${contratosAguardando(o, 'cliente').length ? `
+          <div class="sec-t"><h2>Documentos para assinar</h2>
+            <span class="tag tag--bad">${contratosAguardando(o, 'cliente').length}</span></div>
+          <div class="lista">${contratosAguardando(o, 'cliente').map(c => linha({
+            titulo: esc(c.titulo),
+            sub: `${contratoRotulo(c.tipo)} · ${esc(c.codigo)}${c.valor ? ' · ' + moeda(c.valor) : ''}`,
+            icone: 'assinar', acao: 'ctr',
+          })).join('')}</div>` : ''}
 
         ${minhasAprov.length ? `
           <div class="sec-t"><h2>Esperando a sua aprovação</h2><span class="tag tag--bad">${minhasAprov.length}</span></div>
@@ -723,6 +738,7 @@ function painelCliente(minhas) {
     </div>`);
 
   $$('[data-lin="apc"]').forEach(b => b.addEventListener('click', () => App.ir(`#/obra/${o.id}/aprovacoes`)));
+  $$('[data-lin="ctr"]').forEach(b => b.addEventListener('click', () => App.ir(`#/obra/${o.id}/assinaturas`)));
   ligarAcoes(rapidas);
 }
 
@@ -839,7 +855,7 @@ function telaAjustes() {
       <div class="obra-card__meta" style="font-size:13.5px">
         <span class="row"><span>E-mail</span><b>${esc(App.usuario.email)}</b></span>
         <span class="row"><span>Perfil</span><b>${esc(PAPEIS[App.usuario.papel].rotulo)}</b></span>
-        <span class="row"><span>Função</span><b style="text-align:right">${esc(App.usuario.cargo || '—')}</b></span>
+        <span class="row"><span>Função</span><b style="text-align:right">${esc(App.usuario.cargo || '-')}</b></span>
         <span class="row"><span>Obras no seu acesso</span><b>${DB.obras(App.usuario).length}</b></span>
       </div>
       <button class="btn btn--block" id="btnSair2" style="margin-top:16px">${icone('sair')}Sair do portal</button>

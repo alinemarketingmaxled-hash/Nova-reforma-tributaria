@@ -116,7 +116,7 @@ function tarefaPorId(o, id) {
   return null;
 }
 
-const nomeTarefa = (o, id) => (tarefaPorId(o, id)?.tarefa.nome) || '—';
+const nomeTarefa = (o, id) => (tarefaPorId(o, id)?.tarefa.nome) || '-';
 
 /* ─── catálogos de frentes por tipo de obra ───────────────── */
 

@@ -250,6 +250,50 @@ function gerarInspecoes(obra, lista) {
   });
 }
 
+/* ─── contratos e assinaturas ─────────────────────────────── */
+
+const TIPOS_CONTRATO = [
+  { id: 'contrato', rotulo: 'Contrato de prestação de serviços' },
+  { id: 'ordem',    rotulo: 'Ordem de início de serviço' },
+  { id: 'aditivo',  rotulo: 'Aditivo de contrato' },
+  { id: 'termo',    rotulo: 'Termo de recebimento' },
+  { id: 'outro',    rotulo: 'Outro documento' },
+];
+const contratoRotulo = (id) => (TIPOS_CONTRATO.find(t => t.id === id) || {}).rotulo || 'Documento';
+
+/* Código curto que identifica a assinatura no comprovante. */
+function codigoAssinatura() {
+  return (Math.random().toString(36).slice(2, 6) + Date.now().toString(36).slice(-4)).toUpperCase();
+}
+
+function assinaturaDe(usuario, nomeDigitado) {
+  return {
+    nome: nomeDigitado,
+    usuario: usuario.id,
+    papel: usuario.papel,
+    em: new Date().toISOString(),
+    codigo: codigoAssinatura(),
+  };
+}
+
+/* Documentos que o cliente assina ao longo da obra. */
+function gerarContratos(obra, cfg, nomeCliente) {
+  const assinouEm = (data) => ({
+    nome: nomeCliente,
+    usuario: obra.cliente_id,
+    papel: 'cliente',
+    em: new Date(dia(data).getTime() + 15 * 3600000).toISOString(),
+    codigo: codigoAssinatura(),
+  });
+
+  return (cfg.contratos || []).map(c => ({
+    id: uid('ct'),
+    assinante: 'cliente',
+    ...c,
+    assinatura: c.status === 'assinado' ? assinouEm(c.assinado_em || c.emitido_em) : null,
+  }));
+}
+
 /*
   Lado comercial da obra: medições mensais e as parcelas que
   o cliente paga. O sinal entra no começo e cada medição vira
@@ -304,7 +348,7 @@ function gerarFinanceiro(obra) {
   Preenche uma obra com os módulos de gestão. `cfg` traz o que muda
   de uma obra para outra: efetivo, diária e a lista de compras.
 */
-function enriquecerObra(obra, cfg) {
+function enriquecerObra(obra, cfg, usuarios = []) {
   const seg = segundaDa(hoje());
   const dSemana = (n, d = 0) => maisDias(seg, -7 * n + d);
 
@@ -358,5 +402,16 @@ function enriquecerObra(obra, cfg) {
 
   obra.aprovacoes = cfg.aprovacoes.map(a => ({ id: uid('ap'), ...a }));
   obra.financeiro = gerarFinanceiro(obra);
+  obra.contratos = gerarContratos(obra, cfg,
+    (usuarios.find(u => u.id === obra.cliente_id) || {}).nome || 'Cliente');
+
+  /* O cliente já acompanhou as semanas anteriores à atual. */
+  relatoriosOrdenados(obra).slice(1, 4).forEach(r => {
+    r.vistos = [{
+      usuario: obra.cliente_id,
+      em: new Date(dia(maisDias(r.ate, 2)).getTime() + 20 * 3600000).toISOString(),
+    }];
+  });
+
   return obra;
 }

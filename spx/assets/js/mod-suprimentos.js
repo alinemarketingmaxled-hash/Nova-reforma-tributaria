@@ -64,7 +64,7 @@ function verMaterial(o, m) {
       <div class="lista">
         ${movs.length ? movs.map(x => linha({
           titulo: `${TIPOS_MOV[x.tipo]} de ${x.qtd} ${esc(m.unidade)}`,
-          sub: `${fmtData(x.data)} · ${esc(x.doc || '—')}${x.lote ? ' · lote ' + esc(x.lote) : ''} · ${esc(DB.nome(x.responsavel))}`,
+          sub: `${fmtData(x.data)} · ${esc(x.doc || '-')}${x.lote ? ' · lote ' + esc(x.lote) : ''} · ${esc(DB.nome(x.responsavel))}`,
           valor: (x.tipo === 'saida' || x.tipo === 'perda' ? '−' : '+') + x.qtd,
         })).join('') : '<p class="hint">Nenhuma movimentação registrada.</p>'}
       </div>`,

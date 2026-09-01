@@ -19,6 +19,7 @@ function cartaoRelatorio(o, r, expandido = false, mostrarObra = false) {
       ${mostrarObra ? `<span class="tag">${esc(o.nome)}</span>` : ''}
       ${diasAtraso ? `<span class="tag tag--bad"><span class="dot"></span>${diasAtraso} dia(s) de atraso</span>`
                    : '<span class="tag tag--ok"><span class="dot"></span>Sem atraso</span>'}
+      ${(r.vistos || []).length ? '<span class="tag tag--info">Visto do cliente</span>' : ''}
       <span class="when" style="margin-left:auto">${esc(DB.nome(r.autor))}</span>
     </div>
 
@@ -109,6 +110,28 @@ function telaSemana(o, rid) {
 
     ${cartaoRelatorio(o, r, true)}
 
+    ${App.usuario.papel !== 'engenheiro' ? `
+      <div class="visto-barra no-print">
+        <span class="lin__i" style="background:var(--${meuVisto(r) ? 'ok' : 't3'}-soft, var(--t3));color:var(--${meuVisto(r) ? 'ok' : 't3i'})">
+          ${icone(meuVisto(r) ? 'ok' : 'assinar')}</span>
+        <span class="visto-barra__t">
+          <b>${meuVisto(r) ? 'Você deu o visto nesta semana' : 'Dar o visto nesta semana'}</b>
+          <span>${meuVisto(r)
+            ? `Registrado em ${fmtHora(meuVisto(r).em)}`
+            : 'Confirma que você leu o relatório e está acompanhando a obra.'}</span>
+        </span>
+        ${meuVisto(r) ? '' : '<button class="btn btn--accent" id="btnVisto">Dar visto</button>'}
+      </div>` : `
+      <div class="visto-barra no-print">
+        <span class="lin__i">${icone((r.vistos || []).length ? 'ok' : 'relogio')}</span>
+        <span class="visto-barra__t">
+          <b>${(r.vistos || []).length ? 'Cliente acompanhou esta semana' : 'Cliente ainda não deu o visto'}</b>
+          <span>${(r.vistos || []).length
+            ? `${esc(DB.nome(r.vistos[0].usuario))} em ${fmtHora(r.vistos[0].em)}`
+            : 'O visto aparece aqui quando o cliente confirmar a leitura.'}</span>
+        </span>
+      </div>`}
+
     <div class="card no-print" style="margin-top:16px">
       <div class="card__head">${icone('balao')}<h3>Conversa sobre esta semana</h3></div>
       <div id="listaCmt">
@@ -132,6 +155,7 @@ function telaSemana(o, rid) {
 
   ligarFotos(o);
   $('#btnImprimir').addEventListener('click', () => window.print());
+  $('#btnVisto')?.addEventListener('click', () => darVisto(o, r));
 
   $('#formCmt').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -659,7 +683,7 @@ function telaEquipe(o) {
               <p style="font-size:12.5px;color:var(--muted)">${esc(papel)}</p></div>
           </div>
           <div class="obra-card__meta">
-            <span class="row"><span>Função</span><b style="text-align:right">${esc(u.cargo || '—')}</b></span>
+            <span class="row"><span>Função</span><b style="text-align:right">${esc(u.cargo || '-')}</b></span>
             <span class="row"><span>E-mail</span><b style="text-align:right;overflow-wrap:anywhere">${esc(u.email)}</b></span>
           </div>
         </div>`).join('')}

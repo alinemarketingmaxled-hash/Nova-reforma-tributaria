@@ -149,6 +149,7 @@ em regulamentação. Confira sempre as fontes oficiais citadas no rodapé antes 
 Este repositório também hospeda o sistema de gestão de obras da SPX, em
 [`spx/`](spx/): cronograma em frentes e tarefas, custos, valores do contrato,
 recursos, riscos, qualidade, segurança, estoque, compras, documentação,
-aprovações e o relatório semanal com fotos — com uma visão para o cliente, uma
-para o arquiteto e uma para a engenharia, feito para o celular.
+aprovações, assinatura de contratos e o relatório semanal com fotos, com uma
+visão para o cliente, uma
+para o arquiteto e uma para a engenharia, feito para uso no celular.
 Detalhes em [`spx/README.md`](spx/README.md).

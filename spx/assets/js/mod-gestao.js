@@ -161,12 +161,12 @@ function telaDesempenho(o) {
         <span class="idx__t"><b>Índice de custo</b><span>${moeda(valorAgregado(o))} de serviço entregue para ${moeda(custoRealizado(o))} gastos.</span></span>
       </div>` : ''}
       <div class="idx idx--${taxa === null ? 'warn' : taxa >= 90 ? 'ok' : taxa >= 70 ? 'warn' : 'bad'}">
-        <span class="idx__v">${taxa === null ? '—' : taxa + '%'}</span>
+        <span class="idx__v">${taxa === null ? '-' : taxa + '%'}</span>
         <span class="idx__t"><b>Qualidade</b><span>Inspeções aprovadas de primeira, em ${o.inspecoes.length} verificações. ${ncsAbertas(o).length} não conformidade(s) aberta(s).</span></span>
       </div>
       <div class="idx idx--${conf === null ? 'warn' : conf >= 95 ? 'ok' : conf >= 80 ? 'warn' : 'bad'}">
         <span class="idx__v">${diasSemAcidente(o)}</span>
-        <span class="idx__t"><b>Dias sem acidente</b><span>Conformidade média das verificações de norma: ${conf === null ? '—' : conf + '%'}.</span></span>
+        <span class="idx__t"><b>Dias sem acidente</b><span>Conformidade média das verificações de norma: ${conf === null ? '-' : conf + '%'}.</span></span>
       </div>
     </div>
 
