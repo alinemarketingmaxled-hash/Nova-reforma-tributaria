@@ -158,6 +158,7 @@ function telaFormSemana(o, rid) {
   rascunhoFotos = existente ? (existente.fotos || []).map(f => ({ ...f, existente: true })) : [];
 
   const atrasos = existente ? [...(existente.atrasos || [])] : [];
+  const daSemana = new Set(tarefasDaSemana(o, de, ate).map(t => t.id));
 
   topo(existente ? `Editar semana ${existente.semana}` : 'Relatório da semana',
     `${o.nome} · ${fmtPeriodo(de, ate)}`);
@@ -212,16 +213,27 @@ function telaFormSemana(o, rid) {
       </div>
 
       <div class="card">
-        <div class="card__head">${icone('etapas')}<h2>Andamento das etapas</h2></div>
-        <p class="hint" style="margin:-8px 0 14px">Arraste para atualizar o percentual de cada etapa. O gráfico da obra é recalculado a partir daqui.</p>
-        <div id="listaEtapas">
-          ${o.etapas.map(e => `
-            <div class="etapa" data-etapa="${e.id}">
-              <div class="etapa__t"><b>${esc(e.nome)}</b><span>peso ${e.peso}% · previsto de ${fmtData(e.inicio)} a ${fmtData(e.fim)}</span></div>
-              <div class="etapa__pct" data-pct>${e.progresso}%</div>
-              <div class="etapa__rng"><input type="range" min="0" max="100" step="5" value="${e.progresso}" aria-label="${esc(e.nome)}"></div>
-            </div>`).join('')}
+        <div class="card__head">${icone('etapas')}<h2>Andamento das tarefas</h2></div>
+        <p class="hint" style="margin:-8px 0 14px">As tarefas previstas para esta semana já vêm abertas.
+          Arraste para atualizar; o percentual da obra é recalculado a partir daqui.</p>
+        <div id="listaTarefas">
+          ${o.etapas.map(f => {
+            const abertas = f.tarefas.filter(t => daSemana.has(t.id));
+            const outras = f.tarefas.filter(t => !daSemana.has(t.id));
+            const linhaT = (t, desta) => `
+              <div class="etapa" data-tarefa="${t.id}" data-frente="${f.id}" ${desta ? '' : 'data-extra hidden'}>
+                <div class="etapa__t"><b>${esc(t.nome)}</b>
+                  <span>${esc(f.nome)} · ${t.duracao} dia(s) · ${fmtData(t.inicio)} a ${fmtData(t.fim)}</span></div>
+                <div class="etapa__pct" data-pct>${t.progresso}%</div>
+                <div class="etapa__rng"><input type="range" min="0" max="100" step="5" value="${t.progresso}" aria-label="${esc(t.nome)}"></div>
+              </div>`;
+            return abertas.map(t => linhaT(t, true)).join('') + outras.map(t => linhaT(t, false)).join('');
+          }).join('')}
         </div>
+        <label class="chip" style="margin-top:12px">
+          <input type="checkbox" id="verTodas" style="width:18px;height:18px;accent-color:var(--ink)">
+          Mostrar todas as tarefas da obra
+        </label>
         <p class="hint" style="margin-top:12px">Percentual da obra com estes valores: <b id="pctObra">${progressoObra(o)}%</b></p>
       </div>
 
@@ -292,18 +304,26 @@ function telaFormSemana(o, rid) {
   ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('is-over'); }));
   drop.addEventListener('drop', e => receber(e.dataTransfer.files));
 
-  /* ── etapas ── */
+  /* ── tarefas ── */
   const recalcular = () => {
-    const total = o.etapas.reduce((s, e) => s + e.peso, 0) || 1;
-    const soma = $$('#listaEtapas .etapa').reduce((s, li) => {
-      const et = o.etapas.find(e => e.id === li.dataset.etapa);
-      return s + et.peso * Number($('input[type=range]', li).value);
+    const pesoTotal = o.etapas.reduce((s, f) => s + f.peso, 0) || 1;
+    const soma = o.etapas.reduce((s, f) => {
+      const dur = f.tarefas.reduce((t, x) => t + x.duracao, 0) || 1;
+      const feito = f.tarefas.reduce((t, x) => {
+        const li = $(`[data-tarefa="${x.id}"]`);
+        const v = li ? Number($('input[type=range]', li).value) : x.progresso;
+        return t + x.duracao * v;
+      }, 0);
+      return s + f.peso * (feito / dur);
     }, 0);
-    $('#pctObra').textContent = Math.round(soma / total) + '%';
+    $('#pctObra').textContent = Math.round(soma / pesoTotal) + '%';
   };
-  $$('#listaEtapas .etapa').forEach(li => {
+  $$('#listaTarefas .etapa').forEach(li => {
     const rng = $('input[type=range]', li);
     rng.addEventListener('input', () => { $('[data-pct]', li).textContent = rng.value + '%'; recalcular(); });
+  });
+  $('#verTodas').addEventListener('change', (e) => {
+    $$('#listaTarefas [data-extra]').forEach(li => { li.hidden = !e.target.checked; });
   });
 
   /* ── atrasos ── */
@@ -365,11 +385,12 @@ function telaFormSemana(o, rid) {
     const duplicada = o.relatorios.some(r => r.de === deV && r.id !== rid);
     if (duplicada) return aviso('Já existe um relatório para esta semana. Edite o que existe.', 'bad');
 
-    /* atualiza as etapas com o que ficou nos controles */
-    $$('#listaEtapas .etapa').forEach(li => {
-      const et = o.etapas.find(x => x.id === li.dataset.etapa);
-      if (et) et.progresso = Number($('input[type=range]', li).value);
+    /* atualiza as tarefas com o que ficou nos controles */
+    $$('#listaTarefas .etapa').forEach(li => {
+      const achado = tarefaPorId(o, li.dataset.tarefa);
+      if (achado) achado.tarefa.progresso = Number($('input[type=range]', li).value);
     });
+    o.etapas.forEach(sincronizarFrente);
 
     /* guarda as fotos novas e descarta do navegador as que saíram */
     const fotos = [];
@@ -433,115 +454,6 @@ function telaFormSemana(o, rid) {
         App.ir(`#/obra/${o.id}/semanas`);
       }, 'Excluir'));
   }
-}
-
-/* ─── etapas e cronograma ─────────────────────────────────── */
-
-function telaEtapas(o) {
-  const editavel = App.podeEditar();
-  const real = progressoObra(o);
-  const plan = progressoPlanejado(o);
-  const s = situacaoObra(o);
-
-  topo('Etapas e cronograma', `${o.nome} · ${o.etapas.filter(e => e.progresso === 100).length} de ${o.etapas.length} concluídas`,
-    editavel ? `<button class="btn btn--sm" id="btnNovaEtapa">${icone('mais')}<span>Nova etapa</span></button>` : '');
-
-  pintar(`
-    <div class="grid g-3" style="margin-bottom:16px">
-      ${kpi('Executado', real + '%', `previsto para hoje: ${plan}%`)}
-      ${kpi('Situação', `<span style="font-size:20px">${s.rotulo}</span>`, `${s.dif > 0 ? '+' : ''}${s.dif} pontos percentuais`)}
-      ${kpi('Prazo', fmtData(o.prazo), `${difDias(hoje(), o.prazo)} dias a partir de hoje`)}
-    </div>
-
-    <div class="card">
-      <div class="card__head">${icone('etapas')}<h2>Etapas da obra</h2>
-        <span class="tag">peso total ${o.etapas.reduce((t, e) => t + e.peso, 0)}%</span></div>
-      <div id="etapas">
-        ${o.etapas.map(e => {
-          const previsto = Math.round(Math.max(0, Math.min(1, difDias(e.inicio, hoje()) / Math.max(1, difDias(e.inicio, e.fim)))) * 100);
-          const dif = e.progresso - previsto;
-          const cor = e.progresso === 100 ? 'is-ok' : dif < -15 ? 'is-bad' : dif < -5 ? 'is-warn' : '';
-          return `
-          <div class="etapa" data-etapa="${e.id}">
-            <div class="etapa__t">
-              <b>${esc(e.nome)}</b>
-              <span>peso ${e.peso}% · ${fmtData(e.inicio)} a ${fmtData(e.fim)} · previsto ${previsto}%</span>
-            </div>
-            <div class="etapa__pct" data-pct>${e.progresso}%</div>
-            ${editavel
-              ? `<div class="etapa__rng"><input type="range" min="0" max="100" step="5" value="${e.progresso}" aria-label="${esc(e.nome)}"></div>
-                 <button class="x-btn" data-editar="${e.id}" title="Ajustar etapa">${icone('editar')}</button>`
-              : `<div class="etapa__bar"><div class="track"><i class="${cor}" style="--w:${e.progresso}%"></i></div></div>`}
-          </div>`;
-        }).join('')}
-      </div>
-      ${editavel ? '<p class="hint" style="margin-top:14px">O percentual é salvo assim que você solta o controle.</p>' : ''}
-    </div>`);
-
-  if (!editavel) return;
-
-  $$('#etapas .etapa').forEach(li => {
-    const rng = $('input[type=range]', li);
-    if (!rng) return;
-    rng.addEventListener('input', () => { $('[data-pct]', li).textContent = rng.value + '%'; });
-    rng.addEventListener('change', () => {
-      const et = o.etapas.find(e => e.id === li.dataset.etapa);
-      et.progresso = Number(rng.value);
-      DB.salvar();
-      aviso(`${et.nome}: ${et.progresso}%`);
-      desenharNav();
-    });
-  });
-
-  $$('#etapas [data-editar]').forEach(b => b.addEventListener('click', () => {
-    const et = o.etapas.find(e => e.id === b.dataset.editar);
-    formEtapa(o, et);
-  }));
-
-  $('#btnNovaEtapa').addEventListener('click', () => formEtapa(o, null));
-}
-
-function formEtapa(o, etapa) {
-  modal({
-    titulo: etapa ? 'Ajustar etapa' : 'Nova etapa',
-    corpo: `
-      <div class="field"><label for="eNome">Nome</label>
-        <input class="inp" id="eNome" value="${esc(etapa?.nome || '')}" placeholder="Ex.: Impermeabilização"></div>
-      <div class="row2">
-        <div class="field"><label for="eInicio">Início previsto</label>
-          <input class="inp" type="date" id="eInicio" value="${etapa?.inicio || o.inicio}"></div>
-        <div class="field"><label for="eFim">Fim previsto</label>
-          <input class="inp" type="date" id="eFim" value="${etapa?.fim || o.prazo}"></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label for="ePeso">Peso na obra (%)</label>
-          <input class="inp" type="number" id="ePeso" min="1" max="100" value="${etapa?.peso ?? 5}"></div>
-        <div class="field"><label for="eProg">Executado (%)</label>
-          <input class="inp" type="number" id="eProg" min="0" max="100" step="5" value="${etapa?.progresso ?? 0}"></div>
-      </div>
-      <p class="hint">O peso define quanto a etapa representa no percentual total da obra.</p>`,
-    acoes: [
-      ...(etapa ? [{ rotulo: 'Excluir', classe: 'btn--bad', aoClicar: (_, f) => {
-        o.etapas = o.etapas.filter(e => e.id !== etapa.id);
-        DB.salvar(); f(); aviso('Etapa removida.'); App.rotear();
-      } }] : []),
-      { rotulo: 'Cancelar', classe: 'btn--ghost', aoClicar: (_, f) => f() },
-      { rotulo: 'Salvar', classe: 'btn--dark', aoClicar: (bg, f) => {
-        const nome = $('#eNome', bg).value.trim();
-        if (!nome) return aviso('Dê um nome à etapa.', 'bad');
-        const dados = {
-          nome,
-          inicio: $('#eInicio', bg).value || o.inicio,
-          fim: $('#eFim', bg).value || o.prazo,
-          peso: Math.max(1, Number($('#ePeso', bg).value || 1)),
-          progresso: Math.max(0, Math.min(100, Number($('#eProg', bg).value || 0))),
-        };
-        if (etapa) Object.assign(etapa, dados);
-        else o.etapas.push({ id: uid('et'), ...dados });
-        DB.salvar(); f(); aviso('Etapa salva.'); App.rotear();
-      } },
-    ],
-  });
 }
 
 /* ─── fotos ───────────────────────────────────────────────── */

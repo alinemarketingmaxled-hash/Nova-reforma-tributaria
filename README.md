@@ -144,9 +144,11 @@ repositório.
 Conteúdo informativo. Não constitui consultoria jurídica ou contábil, e a legislação segue
 em regulamentação. Confira sempre as fontes oficiais citadas no rodapé antes de decidir.
 
-## SPX Engenharia · Portal de Obras
+## SPX Engenharia · Gestão de Obras
 
-Este repositório também hospeda o portal de obras da SPX, em [`spx/`](spx/):
-relatório semanal com fotos, percentual executado comparado ao cronograma,
-motivo dos atrasos e uma visão para o cliente, uma para o arquiteto e uma para
-a engenharia. Detalhes em [`spx/README.md`](spx/README.md).
+Este repositório também hospeda o sistema de gestão de obras da SPX, em
+[`spx/`](spx/): cronograma em frentes e tarefas, custos, valores do contrato,
+recursos, riscos, qualidade, segurança, estoque, compras, documentação,
+aprovações e o relatório semanal com fotos — com uma visão para o cliente, uma
+para o arquiteto e uma para a engenharia, feito para o celular.
+Detalhes em [`spx/README.md`](spx/README.md).

@@ -40,6 +40,14 @@ const ICONES = {
   filtro: '<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
   vazio: '<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 10.5h8M8 15h5"/>',
   chave: '<path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="4"/>',
+  doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>',
+  caixa: '<path d="M3 8.5 12 4l9 4.5v7L12 20l-9-4.5z"/><path d="m3 8.5 9 4.5 9-4.5M12 13v7"/>',
+  carrinho: '<circle cx="9.5" cy="19.5" r="1.6"/><circle cx="17" cy="19.5" r="1.6"/><path d="M3 4h2.2l2.3 11h11l2-8H6.2"/>',
+  escudo: '<path d="M12 3 5 6v5.5c0 4.3 2.9 8.2 7 9.5 4.1-1.3 7-5.2 7-9.5V6z"/><path d="m9 12 2 2 4-4"/>',
+  dinheiro: '<rect x="2.5" y="6" width="19" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10v4M18 10v4"/>',
+  regua: '<rect x="2.5" y="8" width="19" height="8" rx="2"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/>',
+  raio: '<path d="M13 3 5 13h6l-1 8 8-10h-6z"/>',
+  assinar: '<path d="M3 18c3.5 0 3-10 6-10s2.5 8 5 8 2-4 4-4"/><path d="M3 21h18"/>',
 };
 
 const icone = (nome, cls = '') =>
@@ -155,6 +163,34 @@ function ampliar(src, legenda = '') {
   document.addEventListener('keydown', tecla);
   document.body.appendChild(el);
 }
+
+/* ─── abas internas de uma tela ───────────────────────────── */
+
+/* Estado de interface que não vale a pena gravar: aba aberta, filtro. */
+const ESTADO = {};
+
+const abas = (id, opcoes, ativa) => `
+  <div class="seg" data-abas="${esc(id)}">${opcoes.map(o => `
+    <button type="button" data-aba="${esc(o.id)}" class="${o.id === ativa ? 'is-on' : ''}">
+      ${esc(o.rotulo)}${o.contador ? ` (${o.contador})` : ''}
+    </button>`).join('')}</div>`;
+
+function ligarAbas(id, aoTrocar) {
+  $$(`[data-abas="${id}"] [data-aba]`).forEach(b =>
+    b.addEventListener('click', () => aoTrocar(b.dataset.aba)));
+}
+
+/* Linha de lista com título, apoio e um valor à direita. */
+const linha = ({ titulo, sub, valor, subvalor, icone: ic, tag, acao }) => `
+  <${acao ? 'button type="button"' : 'div'} class="lin${acao ? '' : ' lin--parado'}" ${acao ? `data-lin="${esc(acao)}"` : ''}>
+    ${ic ? `<span class="lin__i">${icone(ic)}</span>` : ''}
+    <span class="lin__t"><b>${titulo}</b>${sub ? `<span>${sub}</span>` : ''}</span>
+    ${tag || ''}
+    ${valor !== undefined ? `<span class="lin__x">${valor}${subvalor ? `<small>${subvalor}</small>` : ''}</span>` : ''}
+  </${acao ? 'button' : 'div'}>`;
+
+const voltarPara = (href, texto = 'Voltar') =>
+  `<a class="btn btn--sm btn--ghost" href="${href}" style="margin-bottom:14px">${icone('volta')}${esc(texto)}</a>`;
 
 /* ─── blocos comuns ───────────────────────────────────────── */
 

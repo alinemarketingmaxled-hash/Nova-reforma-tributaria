@@ -1,0 +1,418 @@
+/* ============================================================
+   SPX · conteúdo de demonstração dos módulos de gestão
+   Uma obra vem completa (Vila Madalena) e as outras duas com
+   um recorte menor, para o portal abrir já com o que mostrar.
+   ============================================================ */
+
+const FORNECEDORES = [
+  { id: 'fo1', nome: 'Depósito Vila Nova',        categoria: 'Material básico',    contato: 'Sérgio Prado',   telefone: '(11) 3862-4100', avaliacao: 4 },
+  { id: 'fo2', nome: 'Cerâmica Center Revestimentos', categoria: 'Revestimentos',  contato: 'Aline Bezerra',  telefone: '(11) 3021-7788', avaliacao: 5 },
+  { id: 'fo3', nome: 'Elétrica Total',            categoria: 'Material elétrico',  contato: 'Wagner Ito',     telefone: '(11) 2966-3300', avaliacao: 4 },
+  { id: 'fo4', nome: 'Hidro Center',              categoria: 'Hidráulica',         contato: 'Denise Rocha',   telefone: '(11) 4114-9022', avaliacao: 3 },
+  { id: 'fo5', nome: 'Marcenaria Bertolini',      categoria: 'Marcenaria',         contato: 'Vitor Bertolini', telefone: '(11) 99812-4477', avaliacao: 5 },
+  { id: 'fo6', nome: 'Locadora Pátio Máquinas',   categoria: 'Equipamentos',       contato: 'Rogério Alves',  telefone: '(11) 3777-1200', avaliacao: 4 },
+  { id: 'fo7', nome: 'Casa das Tintas',           categoria: 'Pintura',            contato: 'Márcia Leal',    telefone: '(11) 3567-8890', avaliacao: 4 },
+];
+
+function configGestao(id) {
+  const seg = segundaDa(hoje());
+  const s = (n, d = 0) => maisDias(seg, -7 * n + d);   /* n semanas atrás */
+  const f = (n, d = 0) => maisDias(seg, 7 * n + d);    /* n semanas à frente */
+
+  if (id === 'ob_vila') return {
+    custoDireto: 850000,
+    cpi: 1.03,
+    efetivo: 9,
+    diaria: 280,
+    materiais: [
+      { desc: 'Blocos cerâmicos e argamassa de assentamento', valor: 14000, forn: 'fo1' },
+      { desc: 'Areia, cimento e cal',                          valor: 6500,  forn: 'fo1' },
+      { desc: 'Tubos e conexões de PVC e PPR',                 valor: 9400,  forn: 'fo4' },
+      { desc: 'Cabos, eletrodutos e caixas',                   valor: 3900,  forn: 'fo3' },
+      { desc: 'Porcelanato 120x120 da área social',            valor: 16200, forn: 'fo2' },
+      { desc: 'Manta líquida e tela de reforço',               valor: 5600,  forn: 'fo1' },
+      { desc: 'Argamassa colante AC-III e rejunte',            valor: 4800,  forn: 'fo2' },
+      { desc: 'Quadro de distribuição e disjuntores',          valor: 11100, forn: 'fo3' },
+      { desc: 'Material de consumo e ferramentas',             valor: 2400,  forn: 'fo1' },
+      { desc: 'Revestimento dos banhos e soleiras',            valor: 8900,  forn: 'fo2' },
+      { desc: 'Sinal da marcenaria da cozinha',                valor: 12300, forn: 'fo5' },
+      { desc: 'Massa corrida, selador e lixas',                valor: 3600,  forn: 'fo7' },
+    ],
+
+    equipe: [
+      { nome: 'Odair Camargo',    funcao: 'Encarregado de obra', empresa: 'SPX',        custo_dia: 420, de: s(21), ate: f(16), ativo: true },
+      { nome: 'Jonas Ribeiro',    funcao: 'Pedreiro',            empresa: 'SPX',        custo_dia: 320, de: s(20), ate: f(10), ativo: true },
+      { nome: 'Edmilson Souza',   funcao: 'Pedreiro',            empresa: 'SPX',        custo_dia: 320, de: s(18), ate: f(10), ativo: true },
+      { nome: 'Cleiton Barros',   funcao: 'Servente',            empresa: 'SPX',        custo_dia: 190, de: s(21), ate: f(14), ativo: true },
+      { nome: 'Wesley Nunes',     funcao: 'Servente',            empresa: 'SPX',        custo_dia: 190, de: s(12), ate: f(14), ativo: true },
+      { nome: 'Ademir Pinto',     funcao: 'Eletricista',         empresa: 'Elétrica Total', custo_dia: 380, de: s(10), ate: f(6), ativo: true },
+      { nome: 'Nilton Faria',     funcao: 'Encanador',           empresa: 'Hidro Center',   custo_dia: 360, de: s(14), ate: f(4), ativo: true },
+      { nome: 'Rogério Matos',    funcao: 'Azulejista',          empresa: 'SPX',        custo_dia: 350, de: s(4),  ate: f(8),  ativo: true },
+      { nome: 'Paulo Vergara',    funcao: 'Pintor',              empresa: 'SPX',        custo_dia: 300, de: f(8),  ate: f(14), ativo: false },
+    ],
+    equipamentos: [
+      { nome: 'Betoneira 400 L',            tipo: 'Locação', situacao: 'em_obra',    de: s(21), ate: f(6),  custo_mes: 480,  fornecedor_id: 'fo6' },
+      { nome: 'Andaime fachadeiro 6 m',     tipo: 'Locação', situacao: 'em_obra',    de: s(8),  ate: f(10), custo_mes: 1250, fornecedor_id: 'fo6' },
+      { nome: 'Martelete rompedor',         tipo: 'Próprio', situacao: 'manutencao', de: s(21), ate: f(2),  custo_mes: 0,    fornecedor_id: null },
+      { nome: 'Serra mármore e cortadora',  tipo: 'Próprio', situacao: 'em_obra',    de: s(6),  ate: f(8),  custo_mes: 0,    fornecedor_id: null },
+      { nome: 'Container de ferramentas',   tipo: 'Locação', situacao: 'em_obra',    de: s(21), ate: f(16), custo_mes: 690,  fornecedor_id: 'fo6' },
+    ],
+
+    riscos: [
+      { titulo: 'Atraso na entrega da marcenaria sob medida', categoria: 'Suprimentos', probabilidade: 4, impacto: 4,
+        acao: 'Contrato com multa por atraso, medição de obra antecipada e visita à fábrica na metade do prazo de produção.',
+        resposta: 'Mitigar', responsavel: 'u_eng', prazo: f(4) },
+      { titulo: 'Chuva acima da média no período de fachada', categoria: 'Prazo', probabilidade: 4, impacto: 3,
+        acao: 'Antecipar serviços internos nos dias de chuva e manter lona de proteção na área gourmet.',
+        resposta: 'Mitigar', responsavel: 'u_eng', prazo: f(8) },
+      { titulo: 'Alteração de projeto depois do serviço executado', categoria: 'Projeto', probabilidade: 3, impacto: 4,
+        acao: 'Congelar a revisão do projeto antes do início de cada etapa e registrar toda mudança como aditivo.',
+        resposta: 'Evitar', responsavel: 'u_arq', prazo: f(2) },
+      { titulo: 'Estrutura existente fora do projeto original', categoria: 'Custo', probabilidade: 3, impacto: 4,
+        acao: 'Sondagem prévia nas paredes antes de cada demolição e reserva de contingência de 5% no orçamento.',
+        resposta: 'Mitigar', responsavel: 'u_eng', prazo: f(1), status: 'materializado' },
+      { titulo: 'Acidente em trabalho na fachada', categoria: 'Segurança', probabilidade: 2, impacto: 5,
+        acao: 'Permissão de trabalho em altura, linha de vida e checagem diária de ancoragem.',
+        resposta: 'Mitigar', responsavel: 'u_eng', prazo: f(10) },
+      { titulo: 'Reprovação do revestimento por som cavo', categoria: 'Qualidade', probabilidade: 2, impacto: 3,
+        acao: 'Inspeção por percussão a cada 20 m² assentados, com registro na ficha de verificação.',
+        resposta: 'Mitigar', responsavel: 'u_eng', prazo: f(6) },
+    ],
+
+    escopo: {
+      incluido: [
+        'Demolição das paredes indicadas no projeto de layout revisão 04',
+        'Alvenaria nova do closet, lavabo e fechamentos do pavimento superior',
+        'Instalações hidrossanitárias completas dos cinco banheiros e da cozinha',
+        'Instalações elétricas, dados e infraestrutura de automação conforme projeto',
+        'Impermeabilização de áreas molhadas com manta líquida e teste de estanqueidade',
+        'Contrapiso e regularização de 320 m² de piso',
+        'Assentamento de porcelanato e revestimentos fornecidos pela contratante',
+        'Marcenaria sob medida da cozinha, closet e dormitórios',
+        'Pintura interna e externa, com massa corrida e duas demãos',
+        'Limpeza fina e entrega das chaves com manual do proprietário',
+      ],
+      excluido: [
+        'Fornecimento de louças, metais e luminárias',
+        'Mobiliário solto, cortinas e decoração',
+        'Paisagismo, irrigação e iluminação de jardim',
+        'Automação residencial (apenas a infraestrutura está inclusa)',
+        'Aprovação de projeto legal e regularização junto à prefeitura',
+      ],
+      premissas: [
+        'Energia e água disponíveis no local durante toda a obra',
+        'Carga e descarga liberada das 8h às 17h em dias úteis',
+        'Projeto executivo aprovado antes do início de cada etapa',
+        'Material de acabamento entregue na obra com 15 dias de antecedência',
+      ],
+    },
+
+    especificacoes: [
+      { etapa: 'f2', item: 'Alvenaria de vedação', especificacao: 'Bloco cerâmico 14x19x39, argamassa de assentamento no traço 1:2:8',
+        criterio: 'Prumo e nível com desvio máximo de 3 mm por metro; juntas de 10 mm', norma: 'NBR 15270' },
+      { etapa: 'f2', item: 'Vergas e contravergas', especificacao: 'Concreto armado moldado no local, transpasse de 30 cm de cada lado do vão',
+        criterio: 'Escoramento mantido por 7 dias', norma: 'NBR 6118' },
+      { etapa: 'f3', item: 'Água fria', especificacao: 'Tubulação PPR soldável, diâmetros conforme projeto hidráulico revisão 02',
+        criterio: 'Teste de pressão a 4 kgf/cm² por 24 horas sem queda', norma: 'NBR 5626' },
+      { etapa: 'f3', item: 'Esgoto', especificacao: 'PVC série normal, com caixa sifonada e ventilação nos ramais',
+        criterio: 'Declividade mínima de 2% e teste de estanqueidade', norma: 'NBR 8160' },
+      { etapa: 'f4', item: 'Circuitos terminais', especificacao: 'Cabo flexível 750 V, seção mínima de 2,5 mm² para tomadas',
+        criterio: 'Resistência de isolamento acima de 1 MΩ e DR de 30 mA', norma: 'NBR 5410' },
+      { etapa: 'f6', item: 'Contrapiso', especificacao: 'Argamassa no traço 1:4, espessura mínima de 3 cm com aditivo impermeabilizante nas áreas molhadas',
+        criterio: 'Desnível máximo de 3 mm em régua de 2 m', norma: 'NBR 13753' },
+      { etapa: 'f8', item: 'Porcelanato da área social', especificacao: 'Peça 120x120 retificada, argamassa AC-III com dupla colagem',
+        criterio: 'Junta de 2 mm, sem som cavo à percussão, desnível entre peças abaixo de 1 mm', norma: 'NBR 13755' },
+      { etapa: 'f10', item: 'Pintura interna', especificacao: 'Massa corrida PVA, selador acrílico e duas demãos de tinta acrílica acetinada',
+        criterio: 'Cobertura uniforme, sem escorrimento e sem marca de rolo', norma: 'NBR 11702' },
+    ],
+
+    normas: [
+      { codigo: 'NBR 15575', titulo: 'Desempenho de edificações habitacionais', aplicacao: 'Conforto térmico, acústico e vida útil de projeto', status: 'atende' },
+      { codigo: 'NBR 5410',  titulo: 'Instalações elétricas de baixa tensão',    aplicacao: 'Dimensionamento, proteção e aterramento', status: 'atende' },
+      { codigo: 'NBR 5626',  titulo: 'Sistemas prediais de água fria e quente',  aplicacao: 'Prumadas, pressão e teste de estanqueidade', status: 'atende' },
+      { codigo: 'NBR 8160',  titulo: 'Sistemas prediais de esgoto sanitário',    aplicacao: 'Ramais, ventilação e declividade', status: 'atende' },
+      { codigo: 'NBR 9575',  titulo: 'Impermeabilização, seleção e projeto',     aplicacao: 'Áreas molhadas e laje da área gourmet', status: 'verificar' },
+      { codigo: 'NBR 13755', titulo: 'Revestimento cerâmico de fachadas e paredes', aplicacao: 'Assentamento, juntas e ensaio de percussão', status: 'atende' },
+      { codigo: 'NBR 15270', titulo: 'Blocos cerâmicos para alvenaria',          aplicacao: 'Recebimento e assentamento dos blocos', status: 'atende' },
+      { codigo: 'NBR 16280', titulo: 'Reforma em edificações',                   aplicacao: 'Plano de reforma, ART e comunicação ao condomínio', status: 'atende' },
+    ],
+
+    inspecoes: [
+      { fvs: 'alvenaria',         etapa: 'f2', local: 'Closet e lavabo do pavimento superior', data: s(5, 3) },
+      { fvs: 'hidraulica',        etapa: 'f3', local: 'Prumada dos banhos do pavimento superior', data: s(4, 4) },
+      { fvs: 'impermeabilizacao', etapa: 'f3', local: 'Banho da suíte e banho social', data: s(3, 2), obs: 'Teste de 72 horas sem perda de nível.' },
+      { fvs: 'contrapiso',        etapa: 'f6', local: 'Área social e dormitórios', data: s(2, 3), reprovar: [1], obs: 'Trecho junto à porta da sala com desnível de 6 mm; corrigido antes da liberação.' },
+      { fvs: 'eletrica',          etapa: 'f4', local: 'Quadro e circuitos do pavimento superior', data: s(1, 2) },
+      { fvs: 'revestimento',      etapa: 'f8', local: 'Sala e circulação', data: s(0, 2), reprovar: [4], obs: 'Duas peças com som cavo junto à parede sul, refeitas na mesma semana.' },
+    ],
+    ncs: [
+      { titulo: 'Desnível no contrapiso da entrada da sala', descricao: 'Régua de 2 m acusou 6 mm de desnível, acima do critério de 3 mm da especificação.',
+        gravidade: 'media', acao: 'Refazer a regularização do trecho de 4 m² e reinspecionar antes do revestimento.',
+        responsavel: 'u_eng', prazo: s(1, 3), status: 'encerrada', aberta_em: s(2, 3), fechada_em: s(1, 2), etapa: 'f6' },
+      { titulo: 'Som cavo em duas peças de porcelanato', descricao: 'Ensaio de percussão detectou falha de colagem em duas peças na parede sul da sala.',
+        gravidade: 'baixa', acao: 'Remover as peças, refazer a dupla colagem e repetir o ensaio no pano inteiro.',
+        responsavel: 'u_eng', prazo: f(0, 3), status: 'em_acao', aberta_em: s(0, 2), fechada_em: null, etapa: 'f8' },
+      { titulo: 'Cabo de circuito de tomadas com bitola abaixo do projeto', descricao: 'Trecho do circuito 7 executado com cabo de 1,5 mm² onde o projeto pede 2,5 mm².',
+        gravidade: 'alta', acao: 'Substituir o trecho inteiro do circuito e refazer o teste de isolamento com o eletricista responsável.',
+        responsavel: 'u_eng', prazo: f(1, 1), status: 'aberta', aberta_em: s(0, 3), fechada_em: null, etapa: 'f4' },
+    ],
+
+    documentos: [
+      { codigo: 'ARQ-EXE-01', titulo: 'Planta de layout · pavimento térreo', tipo: 'planta', disciplina: 'Arquitetura', revisao: '04', status: 'para_obra', autor: 'u_arq', data: s(9, 1),
+        historico: [{ rev: '04', data: s(9, 1), nota: 'Ajuste da posição da bancada da cozinha', por: 'u_arq' }, { rev: '03', data: s(16, 2), nota: 'Revisão do closet', por: 'u_arq' }] },
+      { codigo: 'ARQ-EXE-02', titulo: 'Planta de layout · pavimento superior', tipo: 'planta', disciplina: 'Arquitetura', revisao: '03', status: 'para_obra', autor: 'u_arq', data: s(11, 1), historico: [] },
+      { codigo: 'ARQ-LUM-01', titulo: 'Projeto luminotécnico', tipo: 'planta', disciplina: 'Arquitetura', revisao: '04', status: 'para_obra', autor: 'u_arq', data: s(3, 2),
+        historico: [{ rev: '04', data: s(3, 2), nota: 'Inclusão dos pontos de luz da escada', por: 'u_arq' }] },
+      { codigo: 'ARQ-DET-07', titulo: 'Detalhamento da bancada e cuba do lavabo', tipo: 'detalhe', disciplina: 'Arquitetura', revisao: '01', status: 'em_analise', autor: 'u_arq', data: s(0, 1), historico: [] },
+      { codigo: 'ELE-PRJ-01', titulo: 'Projeto elétrico e de dados', tipo: 'planta', disciplina: 'Elétrica', revisao: '02', status: 'para_obra', autor: 'u_eng', data: s(12, 3), historico: [] },
+      { codigo: 'HID-PRJ-01', titulo: 'Projeto hidrossanitário', tipo: 'planta', disciplina: 'Hidráulica', revisao: '02', status: 'para_obra', autor: 'u_eng', data: s(13, 1), historico: [] },
+      { codigo: 'SPX-MEM-01', titulo: 'Memorial descritivo de acabamentos', tipo: 'memorial', disciplina: 'Geral', revisao: '02', status: 'aprovado', autor: 'u_eng', data: s(15, 2), historico: [] },
+      { codigo: 'SPX-ART-01', titulo: 'ART de execução de obra', tipo: 'art', disciplina: 'Geral', revisao: '00', status: 'aprovado', autor: 'u_eng', data: s(21, 1), historico: [] },
+      { codigo: 'ARQ-EXE-01', titulo: 'Planta de layout · pavimento térreo (revisão 03)', tipo: 'planta', disciplina: 'Arquitetura', revisao: '03', status: 'obsoleto', autor: 'u_arq', data: s(16, 2), historico: [] },
+    ],
+    alteracoes: [
+      { data: s(9, 1), descricao: 'Mudança da posição da bancada da cozinha', motivo: 'Pedido do cliente após a visita à obra',
+        dias: 2, custo: 4800, solicitante: 'u_cli', status: 'aprovada', documento: 'ARQ-EXE-01 rev. 04' },
+      { data: s(5, 2), descricao: 'Reforço estrutural na abertura da sala', motivo: 'Viga encontrada fora da posição do projeto original',
+        dias: 2, custo: 9600, solicitante: 'u_eng', status: 'aprovada', documento: 'Laudo do calculista' },
+      { data: s(0, 1), descricao: 'Troca do rodapé pintado por perfil embutido de alumínio', motivo: 'Proposta da arquitetura para a área social',
+        dias: 3, custo: 12400, solicitante: 'u_arq', status: 'proposta', documento: 'ARQ-DET-07 rev. 01' },
+    ],
+
+    materiaisEstoque: [
+      { codigo: 'MAT-001', nome: 'Porcelanato 120x120 acetinado', unidade: 'm²', minimo: 20, entrada: 180, saida: 148, fornecedor_id: 'fo2', etapa: 'f8' },
+      { codigo: 'MAT-002', nome: 'Argamassa colante AC-III',       unidade: 'sc', minimo: 15, entrada: 120, saida: 96,  fornecedor_id: 'fo2', etapa: 'f8' },
+      { codigo: 'MAT-003', nome: 'Rejunte cinza platina',           unidade: 'kg', minimo: 20, entrada: 60,  saida: 12,  fornecedor_id: 'fo2', etapa: 'f8' },
+      { codigo: 'MAT-004', nome: 'Cimento CP-II 50 kg',             unidade: 'sc', minimo: 20, entrada: 240, saida: 228, fornecedor_id: 'fo1', etapa: 'f6' },
+      { codigo: 'MAT-005', nome: 'Cabo flexível 2,5 mm²',           unidade: 'm',  minimo: 100, entrada: 900, saida: 760, fornecedor_id: 'fo3', etapa: 'f4' },
+      { codigo: 'MAT-006', nome: 'Tubo PPR 25 mm',                  unidade: 'm',  minimo: 30, entrada: 220, saida: 196, fornecedor_id: 'fo4', etapa: 'f3' },
+      { codigo: 'MAT-007', nome: 'Manta líquida impermeabilizante', unidade: 'gl', minimo: 4,  entrada: 18,  saida: 16,  fornecedor_id: 'fo1', etapa: 'f3' },
+      { codigo: 'MAT-008', nome: 'Massa corrida PVA 18 L',          unidade: 'lt', minimo: 6,  entrada: 12,  saida: 0,   fornecedor_id: 'fo7', etapa: 'f10' },
+    ],
+    pedidos: [
+      { fornecedor_id: 'fo5', descricao: 'Marcenaria da cozinha e do closet', total: 96400, status: 'transporte',
+        emissao: s(6, 1), entrega_prevista: f(0, 3), entrega_real: null, itens: 'Cozinha completa, closet da suíte e painel da TV' },
+      { fornecedor_id: 'fo2', descricao: 'Complemento de porcelanato e rejunte', total: 8700, status: 'entregue',
+        emissao: s(2, 1), entrega_prevista: s(0, 1), entrega_real: s(0, 2), itens: '40 m² de porcelanato e 30 kg de rejunte' },
+      { fornecedor_id: 'fo3', descricao: 'Luminárias de embutir e fitas de LED', total: 15200, status: 'cotacao',
+        emissao: s(0, 2), entrega_prevista: f(2, 3), entrega_real: null, itens: '32 spots, 18 m de fita e fontes' },
+      { fornecedor_id: 'fo4', descricao: 'Louças e metais dos banhos', total: 23800, status: 'aprovado',
+        emissao: s(1, 3), entrega_prevista: f(3, 1), entrega_real: null, itens: '5 cubas, 5 misturadores e 4 chuveiros' },
+      { fornecedor_id: 'fo7', descricao: 'Tinta acrílica e material de pintura', total: 6900, status: 'parcial',
+        emissao: s(1, 1), entrega_prevista: s(0, 3), entrega_real: s(0, 4), itens: 'Faltaram 4 galões da cor da área social' },
+    ],
+
+    ssma: {
+      checklists: [
+        { norma: 'NR-18', data: s(0, 1), responsavel: 'u_eng', reprovar: [5] },
+        { norma: 'NR-06', data: s(1, 1), responsavel: 'u_eng2', reprovar: [] },
+        { norma: 'NR-35', data: s(2, 2), responsavel: 'u_eng', reprovar: [4] },
+        { norma: 'NR-10', data: s(3, 1), responsavel: 'u_eng', reprovar: [] },
+      ],
+      dds: [
+        { data: s(0, 0), tema: 'Uso do cinto e ancoragem no andaime da fachada', participantes: 9, responsavel: 'u_eng' },
+        { data: s(1, 0), tema: 'Organização do canteiro e risco de queda de material', participantes: 8, responsavel: 'u_eng2' },
+        { data: s(2, 0), tema: 'Corte de piso: poeira, ruído e proteção respiratória', participantes: 10, responsavel: 'u_eng' },
+      ],
+      ocorrencias: [
+        { data: s(4, 2), tipo: 'quase_acidente', gravidade: 'media',
+          descricao: 'Balde de argamassa caiu do andaime do segundo pavimento, sem atingir ninguém.',
+          acao: 'Instalada tela de proteção no andaime e reforçada a regra de içamento com corda-guia no DDS seguinte.' },
+      ],
+      residuos: [
+        { data: s(1, 2), classe: 'A', volume: 12, destinacao: 'Aterro de resíduos da construção civil licenciado', cdf: 'CDF-2026-4471' },
+        { data: s(3, 3), classe: 'B', volume: 4,  destinacao: 'Cooperativa de reciclagem Vila Leopoldina', cdf: 'CDF-2026-4390' },
+        { data: s(6, 1), classe: 'A', volume: 18, destinacao: 'Aterro de resíduos da construção civil licenciado', cdf: 'CDF-2026-4288' },
+      ],
+    },
+
+    aprovacoes: [
+      { tipo: 'material', titulo: 'Amostra do rejunte cinza platina', descricao: 'Amostra aplicada em painel de 50x50 na obra, para conferir o tom com o porcelanato.',
+        valor: null, solicitante: 'u_eng', aprovador: 'cliente', status: 'pendente', prazo: f(0, 2), criado_em: s(0, 1), decidido_em: null, decidido_por: null, comentario: '' },
+      { tipo: 'aditivo', titulo: 'Rodapé embutido de alumínio na área social', descricao: 'Troca do rodapé pintado pelo perfil embutido, com impacto de 3 dias e R$ 12.400.',
+        valor: 12400, solicitante: 'u_arq', aprovador: 'cliente', status: 'pendente', prazo: f(1, 1), criado_em: s(0, 1), decidido_em: null, decidido_por: null, comentario: '' },
+      { tipo: 'projeto', titulo: 'Detalhamento da bancada do lavabo · rev. 01', descricao: 'Detalhe com a cuba esculpida e o rebaixo de 3 cm, para liberar a marcenaria.',
+        valor: null, solicitante: 'u_arq', aprovador: 'engenheiro', status: 'pendente', prazo: f(0, 3), criado_em: s(0, 2), decidido_em: null, decidido_por: null, comentario: '' },
+      { tipo: 'medicao', titulo: 'Medição 05 · agosto', descricao: 'Medição do mês fechada em 12% do contrato, referente a contrapiso, elétrica e início do revestimento.',
+        valor: 141600, solicitante: 'u_eng', aprovador: 'cliente', status: 'aprovado', prazo: s(0, 1), criado_em: s(1, 1), decidido_em: s(0, 1), decidido_por: 'u_cli', comentario: 'Aprovado conforme o relatório da semana 35.' },
+      { tipo: 'aditivo', titulo: 'Reforço estrutural da abertura da sala', descricao: 'Serviço não previsto, decorrente da viga fora da posição do projeto original.',
+        valor: 9600, solicitante: 'u_eng', aprovador: 'cliente', status: 'aprovado', prazo: s(4, 2), criado_em: s(5, 1), decidido_em: s(4, 3), decidido_por: 'u_cli', comentario: 'Aprovado após a explicação do engenheiro em obra.' },
+      { tipo: 'projeto', titulo: 'Projeto luminotécnico · rev. 04', descricao: 'Revisão com os pontos de luz da escada que faltavam.',
+        valor: null, solicitante: 'u_arq', aprovador: 'engenheiro', status: 'aprovado', prazo: s(3, 1), criado_em: s(3, 2), decidido_em: s(3, 3), decidido_por: 'u_eng', comentario: 'Liberado para execução.' },
+    ],
+  };
+
+  if (id === 'ob_loja') return {
+    custoDireto: 520000, cpi: 0.94, efetivo: 6, diaria: 300,
+    materiais: [
+      { desc: 'Perfis e placas de gesso acartonado', valor: 9800, forn: 'fo1' },
+      { desc: 'Material elétrico da área de vendas', valor: 7400, forn: 'fo3' },
+      { desc: 'Argamassa e cimento',                 valor: 3900, forn: 'fo1' },
+      { desc: 'Porcelanato do piso de vendas',       valor: 14600, forn: 'fo2' },
+      { desc: 'Tinta epóxi do estoque',              valor: 4100, forn: 'fo7' },
+      { desc: 'Material hidráulico do copa e banho', valor: 2800, forn: 'fo4' },
+    ],
+    equipe: [
+      { nome: 'Adriano Lopes', funcao: 'Encarregado de obra', empresa: 'SPX', custo_dia: 420, de: s(11), ate: f(8), ativo: true },
+      { nome: 'Josué Martins', funcao: 'Pedreiro',            empresa: 'SPX', custo_dia: 320, de: s(11), ate: f(6), ativo: true },
+      { nome: 'Fábio Antunes', funcao: 'Gesseiro',            empresa: 'Terceirizada', custo_dia: 340, de: s(6), ate: f(2), ativo: true },
+      { nome: 'Marcos Deodato', funcao: 'Eletricista',        empresa: 'Elétrica Total', custo_dia: 380, de: s(8), ate: f(4), ativo: true },
+      { nome: 'Ivan Correia',  funcao: 'Servente',            empresa: 'SPX', custo_dia: 190, de: s(11), ate: f(8), ativo: true },
+      { nome: 'Sérgio Bastos', funcao: 'Servente',            empresa: 'SPX', custo_dia: 190, de: s(11), ate: f(8), ativo: true },
+    ],
+    equipamentos: [
+      { nome: 'Andaime móvel 4 m', tipo: 'Locação', situacao: 'em_obra', de: s(8), ate: f(4), custo_mes: 620, fornecedor_id: 'fo6' },
+      { nome: 'Compressor de ar',  tipo: 'Locação', situacao: 'em_obra', de: s(3), ate: f(3), custo_mes: 540, fornecedor_id: 'fo6' },
+    ],
+    riscos: [
+      { titulo: 'Restrição de horário de carga e descarga do prédio', categoria: 'Prazo', probabilidade: 5, impacto: 3,
+        acao: 'Programar entregas para o primeiro horário e negociar janela extra com a administração.', resposta: 'Mitigar', responsavel: 'u_eng', prazo: f(2), status: 'materializado' },
+      { titulo: 'Nova revisão de projeto depois da execução', categoria: 'Projeto', probabilidade: 4, impacto: 4,
+        acao: 'Aprovação formal de cada revisão antes da liberação da frente de serviço.', resposta: 'Evitar', responsavel: 'u_arq', prazo: f(1), status: 'materializado' },
+      { titulo: 'Atraso das gôndolas e do mobiliário da loja', categoria: 'Suprimentos', probabilidade: 3, impacto: 4,
+        acao: 'Acompanhamento quinzenal da produção e antecipação da medição em obra.', resposta: 'Mitigar', responsavel: 'u_eng', prazo: f(4) },
+      { titulo: 'Data de inauguração divulgada antes do fim da obra', categoria: 'Prazo', probabilidade: 3, impacto: 5,
+        acao: 'Alinhar o calendário de marketing ao cronograma físico revisado a cada quinzena.', resposta: 'Transferir', responsavel: 'u_cli2', prazo: f(3) },
+    ],
+    escopo: {
+      incluido: ['Demolição do layout anterior', 'Alvenaria e drywall dos provadores e do caixa',
+        'Forro de gesso da área de vendas', 'Instalação elétrica e iluminação de destaque',
+        'Piso de porcelanato e pintura epóxi do estoque', 'Instalação da vitrine e da fachada'],
+      excluido: ['Mobiliário e gôndolas', 'Ar-condicionado', 'Comunicação visual e letreiro'],
+      premissas: ['Obra executada em horário comercial com liberação do condomínio',
+        'Ligação definitiva de energia já disponível'],
+    },
+    especificacoes: [
+      { etapa: 'f2', item: 'Drywall dos provadores', especificacao: 'Perfil 70 mm com chapa dupla e lã de rocha',
+        criterio: 'Prumo dentro de 3 mm/m e juntas tratadas com fita', norma: 'NBR 15758' },
+      { etapa: 'f4', item: 'Iluminação de destaque', especificacao: 'Trilho eletrificado com spots de 3000 K e IRC acima de 90',
+        criterio: 'Nível de iluminância de 750 lux na área de vendas', norma: 'NBR 5413' },
+      { etapa: 'f6', item: 'Piso da área de vendas', especificacao: 'Porcelanato 90x90 polido com rodapé recuado',
+        criterio: 'Sem som cavo e desnível abaixo de 1 mm entre peças', norma: 'NBR 13755' },
+    ],
+    normas: [
+      { codigo: 'NBR 9077', titulo: 'Saídas de emergência em edifícios', aplicacao: 'Largura da circulação e sinalização de rota de fuga', status: 'verificar' },
+      { codigo: 'NBR 5410', titulo: 'Instalações elétricas de baixa tensão', aplicacao: 'Quadro, circuitos e proteção', status: 'atende' },
+      { codigo: 'NBR 15758', titulo: 'Sistemas construtivos em chapas de gesso', aplicacao: 'Montagem do drywall e do forro', status: 'atende' },
+    ],
+    inspecoes: [
+      { fvs: 'alvenaria', etapa: 'f2', local: 'Provadores e parede do caixa', data: s(2, 2), resp: 'u_eng' },
+      { fvs: 'eletrica',  etapa: 'f4', local: 'Circuitos dos provadores e da vitrine', data: s(1, 3), resp: 'u_eng' },
+    ],
+    ncs: [
+      { titulo: 'Forro executado 4 cm abaixo da cota do projeto', descricao: 'A cota do forro da área de vendas ficou em 2,96 m, contra 3,00 m do projeto.',
+        gravidade: 'media', acao: 'Reposicionar os perfis do trecho central e conferir a cota antes do fechamento das placas.',
+        responsavel: 'u_eng', prazo: f(0, 2), status: 'em_acao', aberta_em: s(0, 2), fechada_em: null, etapa: 'f2' },
+    ],
+    documentos: [
+      { codigo: 'NKM-EXE-01', titulo: 'Layout da loja · rev. 02', tipo: 'planta', disciplina: 'Arquitetura', revisao: '02', status: 'para_obra', autor: 'u_arq2', data: s(2, 1),
+        historico: [{ rev: '02', data: s(2, 1), nota: 'Mudança da posição do balcão do caixa', por: 'u_arq2' }] },
+      { codigo: 'NKM-DET-03', titulo: 'Detalhe da vitrine e da fachada', tipo: 'detalhe', disciplina: 'Arquitetura', revisao: '01', status: 'para_obra', autor: 'u_arq2', data: s(4, 2), historico: [] },
+      { codigo: 'SPX-ART-02', titulo: 'ART de execução', tipo: 'art', disciplina: 'Geral', revisao: '00', status: 'aprovado', autor: 'u_eng', data: s(11, 1), historico: [] },
+    ],
+    alteracoes: [
+      { data: s(2, 1), descricao: 'Reposicionamento do balcão do caixa', motivo: 'Revisão 02 do projeto de layout',
+        dias: 3, custo: 7300, solicitante: 'u_arq2', status: 'aprovada', documento: 'NKM-EXE-01 rev. 02' },
+    ],
+    materiaisEstoque: [
+      { codigo: 'MAT-101', nome: 'Placa de gesso acartonado ST', unidade: 'un', minimo: 10, entrada: 120, saida: 104, fornecedor_id: 'fo1', etapa: 'f2' },
+      { codigo: 'MAT-102', nome: 'Porcelanato 90x90 polido',     unidade: 'm²', minimo: 15, entrada: 190, saida: 40,  fornecedor_id: 'fo2', etapa: 'f6' },
+      { codigo: 'MAT-103', nome: 'Tinta epóxi cinza 18 L',       unidade: 'lt', minimo: 2,  entrada: 8,   saida: 3,   fornecedor_id: 'fo7', etapa: 'f6' },
+    ],
+    pedidos: [
+      { fornecedor_id: 'fo2', descricao: 'Porcelanato da área de vendas', total: 27400, status: 'entregue',
+        emissao: s(4, 1), entrega_prevista: s(2, 2), entrega_real: s(2, 2), itens: '190 m² de porcelanato polido' },
+      { fornecedor_id: 'fo3', descricao: 'Trilhos e spots da iluminação de destaque', total: 18900, status: 'aprovado',
+        emissao: s(1, 2), entrega_prevista: f(1, 3), entrega_real: null, itens: '24 m de trilho e 48 spots' },
+    ],
+    ssma: {
+      checklists: [{ norma: 'NR-18', data: s(0, 2), responsavel: 'u_eng', reprovar: [4] }, { norma: 'NR-06', data: s(2, 1), responsavel: 'u_eng', reprovar: [] }],
+      dds: [{ data: s(0, 0), tema: 'Trabalho em loja ocupada: isolamento e sinalização', participantes: 6, responsavel: 'u_eng' },
+            { data: s(1, 0), tema: 'Corte de gesso e proteção respiratória', participantes: 6, responsavel: 'u_eng' }],
+      ocorrencias: [],
+      residuos: [{ data: s(2, 3), classe: 'C', volume: 6, destinacao: 'Receptor licenciado de gesso', cdf: 'CDF-2026-4402' }],
+    },
+    aprovacoes: [
+      { tipo: 'material', titulo: 'Cor da tinta epóxi do estoque', descricao: 'Confirmar entre o cinza N7 e o cinza chumbo para o piso do estoque.',
+        valor: null, solicitante: 'u_eng', aprovador: 'arquiteto', status: 'pendente', prazo: f(0, 3), criado_em: s(0, 1), decidido_em: null, decidido_por: null, comentario: '' },
+      { tipo: 'medicao', titulo: 'Medição 03 · agosto', descricao: 'Medição referente a alvenaria, forro e início das instalações.',
+        valor: 88600, solicitante: 'u_eng', aprovador: 'cliente', status: 'aprovado', prazo: s(0, 2), criado_em: s(1, 2), decidido_em: s(0, 2), decidido_por: 'u_cli2', comentario: '' },
+    ],
+  };
+
+  /* Apartamento Jardins: obra recém-iniciada */
+  return {
+    custoDireto: 430000, cpi: 0.97, efetivo: 5, diaria: 290,
+    materiais: [
+      { desc: 'Material de proteção das áreas comuns', valor: 3200, forn: 'fo1' },
+      { desc: 'Sacos de entulho e locação de caçamba', valor: 2600, forn: 'fo6' },
+      { desc: 'Blocos e argamassa da suíte',           valor: 7100, forn: 'fo1' },
+      { desc: 'Material elétrico inicial',             valor: 4300, forn: 'fo3' },
+    ],
+    equipe: [
+      { nome: 'Valdir Nogueira', funcao: 'Encarregado de obra', empresa: 'SPX', custo_dia: 420, de: s(5), ate: f(20), ativo: true },
+      { nome: 'Elias Prado',     funcao: 'Pedreiro',            empresa: 'SPX', custo_dia: 320, de: s(5), ate: f(16), ativo: true },
+      { nome: 'Damião Alves',    funcao: 'Servente',            empresa: 'SPX', custo_dia: 190, de: s(5), ate: f(20), ativo: true },
+      { nome: 'Renato Vidal',    funcao: 'Servente',            empresa: 'SPX', custo_dia: 190, de: s(5), ate: f(20), ativo: true },
+      { nome: 'Iury Campos',     funcao: 'Ajudante',            empresa: 'SPX', custo_dia: 180, de: s(4), ate: f(12), ativo: true },
+    ],
+    equipamentos: [
+      { nome: 'Martelete rompedor', tipo: 'Próprio', situacao: 'em_obra', de: s(5), ate: f(4), custo_mes: 0, fornecedor_id: null },
+      { nome: 'Caçamba estacionária', tipo: 'Locação', situacao: 'em_obra', de: s(5), ate: f(6), custo_mes: 890, fornecedor_id: 'fo6' },
+    ],
+    riscos: [
+      { titulo: 'Contrapiso existente fora de nível em toda a área', categoria: 'Custo', probabilidade: 5, impacto: 4,
+        acao: 'Orçamento complementar de regularização enviado à cliente e levantamento a laser de toda a área.', resposta: 'Aceitar', responsavel: 'u_eng2', prazo: f(1), status: 'materializado' },
+      { titulo: 'Restrições do condomínio a horário e ruído', categoria: 'Prazo', probabilidade: 4, impacto: 3,
+        acao: 'Concentrar serviços ruidosos entre 9h e 16h e comunicar a portaria com um dia de antecedência.', resposta: 'Mitigar', responsavel: 'u_eng2', prazo: f(6) },
+      { titulo: 'Infiltração vinda da unidade superior', categoria: 'Qualidade', probabilidade: 2, impacto: 4,
+        acao: 'Registro fotográfico das manchas e notificação formal ao condomínio antes do revestimento.', resposta: 'Transferir', responsavel: 'u_eng2', prazo: f(4) },
+    ],
+    escopo: {
+      incluido: ['Demolição conforme o projeto de layout', 'Alvenaria e drywall da nova suíte',
+        'Instalações elétricas e hidráulicas completas', 'Contrapiso, revestimentos e marcenaria', 'Pintura geral e entrega'],
+      excluido: ['Troca das esquadrias de alumínio', 'Reforma da área comum', 'Louças e metais'],
+      premissas: ['Obra com o apartamento desocupado', 'Uso do elevador de serviço das 9h às 16h'],
+    },
+    especificacoes: [
+      { etapa: 'f2', item: 'Demolição', especificacao: 'Remoção do piso de tacos e das paredes indicadas, sem intervenção em elementos estruturais',
+        criterio: 'Sem trinca nas paredes vizinhas e entulho ensacado no mesmo dia', norma: 'NBR 16280' },
+      { etapa: 'f6', item: 'Regularização do contrapiso', especificacao: 'Argamassa autonivelante nas áreas com desnível acima de 2 cm',
+        criterio: 'Desnível máximo de 3 mm em régua de 2 m', norma: 'NBR 13753' },
+    ],
+    normas: [
+      { codigo: 'NBR 16280', titulo: 'Reforma em edificações', aplicacao: 'Plano de reforma aprovado pelo condomínio', status: 'atende' },
+      { codigo: 'NBR 15575', titulo: 'Desempenho de edificações', aplicacao: 'Desempenho acústico do piso da suíte', status: 'verificar' },
+    ],
+    inspecoes: [
+      { fvs: 'alvenaria', etapa: 'f3', local: 'Parede nova da suíte', data: s(0, 3), resp: 'u_eng2' },
+    ],
+    ncs: [],
+    documentos: [
+      { codigo: 'ARQ-JD-01', titulo: 'Projeto de layout do apartamento', tipo: 'planta', disciplina: 'Arquitetura', revisao: '02', status: 'para_obra', autor: 'u_arq', data: s(6, 1), historico: [] },
+      { codigo: 'SPX-PLR-01', titulo: 'Plano de reforma para o condomínio', tipo: 'memorial', disciplina: 'Geral', revisao: '01', status: 'aprovado', autor: 'u_eng2', data: s(5, 1), historico: [] },
+    ],
+    alteracoes: [
+      { data: s(0, 2), descricao: 'Regularização de 96 m² de contrapiso fora de nível', motivo: 'Desnível encontrado após a demolição do piso de tacos',
+        dias: 4, custo: 18400, solicitante: 'u_eng2', status: 'proposta', documento: 'Orçamento complementar 01' },
+    ],
+    materiaisEstoque: [
+      { codigo: 'MAT-201', nome: 'Lona plástica de proteção', unidade: 'm', minimo: 20, entrada: 120, saida: 96, fornecedor_id: 'fo1', etapa: 'f1' },
+      { codigo: 'MAT-202', nome: 'Bloco cerâmico 14x19x39',   unidade: 'un', minimo: 100, entrada: 600, saida: 180, fornecedor_id: 'fo1', etapa: 'f3' },
+    ],
+    pedidos: [
+      { fornecedor_id: 'fo1', descricao: 'Material da alvenaria da suíte', total: 9400, status: 'entregue',
+        emissao: s(1, 1), entrega_prevista: s(0, 1), entrega_real: s(0, 1), itens: '600 blocos, cimento e areia' },
+    ],
+    ssma: {
+      checklists: [{ norma: 'NR-18', data: s(0, 1), responsavel: 'u_eng2', reprovar: [] }],
+      dds: [{ data: s(0, 0), tema: 'Proteção das áreas comuns e convivência com moradores', participantes: 5, responsavel: 'u_eng2' }],
+      ocorrencias: [],
+      residuos: [{ data: s(0, 3), classe: 'A', volume: 14, destinacao: 'Aterro de resíduos da construção civil licenciado', cdf: 'CDF-2026-4468' }],
+    },
+    aprovacoes: [
+      { tipo: 'orcamento', titulo: 'Orçamento complementar da regularização do contrapiso', descricao: 'Regularização de 96 m² de contrapiso fora de nível, com impacto de 4 dias no cronograma.',
+        valor: 18400, solicitante: 'u_eng', aprovador: 'cliente', status: 'pendente', prazo: f(0, 4), criado_em: s(0, 2), decidido_em: null, decidido_por: null, comentario: '' },
+    ],
+  };
+}

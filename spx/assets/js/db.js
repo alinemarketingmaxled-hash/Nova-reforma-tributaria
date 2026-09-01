@@ -4,7 +4,7 @@
    as fotos em IndexedDB (que aguenta arquivos grandes).
    ============================================================ */
 
-const CHAVE_DB = 'spx.obras.v1';
+const CHAVE_DB = 'spx.obras.v2';
 const CHAVE_SESSAO = 'spx.sessao.v1';
 
 /* ─── utilitários ─────────────────────────────────────────── */
@@ -231,6 +231,9 @@ const DB = {
   },
 
   obra(id) { return this.dados.obras.find(o => o.id === id) || null; },
+
+  fornecedor(id) { return (this.dados.fornecedores || []).find(f => f.id === id) || null; },
+  fornecedorNome(id) { return (this.fornecedor(id) || {}).nome || '—'; },
 };
 
 /* ─── cálculos de andamento ───────────────────────────────── */
@@ -304,6 +307,144 @@ function todasAsFotos(obra) {
   );
 }
 
+/* ─── custo, prazo e desempenho ───────────────────────────── */
+
+const custoRealizado = (o) => (o.custos || []).reduce((s, c) => s + c.valor, 0);
+
+function custoPorCategoria(o) {
+  const mapa = new Map();
+  (o.custos || []).forEach(c => mapa.set(c.categoria, (mapa.get(c.categoria) || 0) + c.valor));
+  return CATEGORIAS_CUSTO
+    .map(cat => ({ ...cat, valor: mapa.get(cat.id) || 0 }))
+    .filter(c => c.valor > 0)
+    .sort((a, b) => b.valor - a.valor);
+}
+
+function custoPorEtapa(o) {
+  return o.etapas.map(e => ({
+    etapa: e,
+    orcado: e.orcamento || 0,
+    gasto: (o.custos || []).filter(c => c.etapa === e.id).reduce((s, c) => s + c.valor, 0),
+  }));
+}
+
+/* Valor agregado: quanto do orçamento o serviço já executado representa. */
+const valorAgregado = (o) => (progressoObra(o) / 100) * (o.custo_direto || 0);
+
+/* Acima de 1 a obra está bem: gastou menos do que entregou. */
+function indiceCusto(o) {
+  const real = custoRealizado(o);
+  return real ? valorAgregado(o) / real : 1;
+}
+
+/* Acima de 1 a obra está adiantada em relação ao cronograma. */
+function indicePrazo(o) {
+  const plan = progressoPlanejado(o);
+  return plan ? progressoObra(o) / plan : 1;
+}
+
+/*
+  Curva S: a cada semana, o que o cronograma previa e o que foi
+  executado. A linha do realizado para no dia de hoje.
+*/
+function curvaS(o, emCusto = false) {
+  const pontos = [];
+  const fim = o.prazo > hoje() ? o.prazo : hoje();
+  const passos = Math.min(60, Math.max(6, Math.ceil(difDias(o.inicio, fim) / 7)));
+  const passo = Math.ceil(difDias(o.inicio, fim) / passos);
+  const rels = [...o.relatorios].sort((a, b) => (a.de < b.de ? -1 : 1));
+
+  for (let i = 0; i <= passos; i++) {
+    const data = maisDias(o.inicio, Math.min(i * passo, difDias(o.inicio, fim)));
+    const prev = progressoPlanejado(o, data);
+    let real = null;
+    if (data <= hoje()) {
+      const ate = rels.filter(r => r.ate <= data);
+      real = ate.length ? (ate[ate.length - 1].progresso_apos ?? 0) : 0;
+      if (data === hoje() || i === passos) real = progressoObra(o);
+    }
+    pontos.push(emCusto
+      ? {
+          data,
+          previsto: (prev / 100) * (o.custo_direto || 0),
+          realizado: data <= hoje()
+            ? (o.custos || []).filter(c => c.data <= data).reduce((s, c) => s + c.valor, 0)
+            : null,
+        }
+      : { data, previsto: prev, realizado: real });
+  }
+  return pontos;
+}
+
+/* ─── contrato, medições e pagamentos ─────────────────────── */
+
+/* Aditivos aprovados somam ao valor do contrato. */
+const totalAditivos = (o) => (o.alteracoes || [])
+  .filter(a => a.status === 'aprovada').reduce((s, a) => s + (a.custo || 0), 0);
+
+const valorAtualizado = (o) => o.valor + totalAditivos(o);
+
+const totalFaturado = (o) => (o.financeiro?.medicoes || [])
+  .filter(m => m.status === 'aprovada').reduce((s, m) => s + m.valor, 0);
+
+const totalRecebido = (o) => (o.financeiro?.parcelas || [])
+  .filter(p => p.status === 'pago').reduce((s, p) => s + p.valor, 0);
+
+const aReceber = (o) => valorAtualizado(o) - totalRecebido(o);
+
+const parcelasAtrasadas = (o) => (o.financeiro?.parcelas || [])
+  .filter(p => p.status !== 'pago' && p.vencimento < hoje());
+
+function proximaParcela(o) {
+  return (o.financeiro?.parcelas || [])
+    .filter(p => p.status !== 'pago')
+    .sort((a, b) => (a.vencimento < b.vencimento ? -1 : 1))[0] || null;
+}
+
+/* ─── estoque, qualidade, segurança e aprovações ──────────── */
+
+function saldoMaterial(o, mat) {
+  return (o.movimentacoes || [])
+    .filter(m => m.material_id === mat.id)
+    .reduce((s, m) => s + (m.tipo === 'saida' || m.tipo === 'perda' ? -m.qtd : m.qtd), 0);
+}
+
+const materiaisEmFalta = (o) => (o.materiais || []).filter(m => saldoMaterial(o, m) <= m.minimo);
+
+const ncsAbertas = (o) => (o.ncs || []).filter(n => n.status !== 'encerrada');
+
+function aprovacaoInspecoes(o) {
+  const total = (o.inspecoes || []).length;
+  if (!total) return null;
+  return Math.round(((o.inspecoes.filter(i => i.resultado === 'aprovado').length) / total) * 100);
+}
+
+function conformidadeNR(o) {
+  const listas = (o.ssma?.checklists || []);
+  if (!listas.length) return null;
+  const soma = listas.reduce((s, c) => {
+    const ok = c.itens.filter(i => i.ok).length;
+    return s + (ok / c.itens.length) * 100;
+  }, 0);
+  return Math.round(soma / listas.length);
+}
+
+function diasSemAcidente(o) {
+  const acidentes = (o.ssma?.ocorrencias || [])
+    .filter(x => x.tipo !== 'quase_acidente')
+    .map(x => x.data).sort();
+  const ultimo = acidentes[acidentes.length - 1];
+  return difDias(ultimo || o.inicio, hoje());
+}
+
+function aprovacoesPendentes(o, papel) {
+  return (o.aprovacoes || []).filter(a =>
+    a.status === 'pendente' && (!papel || a.aprovador === papel));
+}
+
+const pedidosAtrasados = (o) => (o.pedidos || []).filter(p =>
+  !['entregue'].includes(p.status) && p.entrega_prevista < hoje());
+
 /* ─── dados de demonstração ───────────────────────────────── */
 
 /* Imagens de exemplo desenhadas em SVG; a obra real usa foto de verdade. */
@@ -331,17 +472,38 @@ function fotoExemplo(tom, texto) {
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 
-function montarEtapas(inicio, prazo, progressos) {
-  const total = difDias(inicio, prazo);
-  const somaPesos = ETAPAS_PADRAO.reduce((s, e) => s + e.peso, 0);
-  let acumulado = 0;
-  return ETAPAS_PADRAO.map((e, i) => {
-    const ini = maisDias(inicio, Math.round((acumulado / somaPesos) * total));
-    acumulado += e.peso;
-    /* as etapas se sobrepõem um pouco, como acontece na obra real */
-    const fim = maisDias(inicio, Math.min(total, Math.round((acumulado / somaPesos) * total) + 10));
-    return { id: 'et' + (i + 1), nome: e.nome, peso: e.peso, progresso: progressos[i] ?? 0, inicio: ini, fim };
+/*
+  Cronograma da obra a partir da estrutura analítica: as datas
+  saem das durações e das ligações entre tarefas, e o prazo é o
+  término da última frente. `decorrido` posiciona o "hoje" da
+  demonstração dentro do cronograma.
+*/
+function cronogramaDaObra(id, decorrido, escala = 1) {
+  const provisorio = montarWBS(hoje(), WBS[id], escala);
+  const span = provisorio.reduce((m, f) => (f.fim > m ? f.fim : m), provisorio[0].fim);
+  const inicio = maisDias(hoje(), -Math.round(difDias(hoje(), span) * decorrido));
+  const etapas = montarWBS(inicio, WBS[id], escala);
+  const prazo = etapas.reduce((m, f) => (f.fim > m ? f.fim : m), etapas[0].fim);
+  return { inicio, prazo, etapas };
+}
+
+/*
+  Preenche o executado de cada tarefa como a obra estaria hoje:
+  o que já passou está pronto, o que está em curso vai pela data.
+  `ritmo` abaixo de 1 deixa a frente atrasada de propósito.
+*/
+function preencherProgresso(etapas, ritmos = {}) {
+  etapas.forEach(f => {
+    const ritmo = ritmos[f.id] ?? 1;
+    f.tarefas.forEach(t => {
+      const bruto = t.fim <= hoje() ? 100
+        : t.inicio >= hoje() ? 0
+        : (difDias(t.inicio, hoje()) / Math.max(1, difDias(t.inicio, t.fim))) * 100;
+      t.progresso = Math.max(0, Math.min(100, Math.round((bruto * ritmo) / 5) * 5));
+    });
+    sincronizarFrente(f);
   });
+  return etapas;
 }
 
 function semear() {
@@ -372,18 +534,17 @@ function semear() {
       area: 320,
       valor: 1180000,
       cliente_id: 'u_cli', arquiteto_id: 'u_arq', engenheiro_id: 'u_eng',
-      inicio: maisDias(seg, -147), prazo: maisDias(seg, 112),
       status: 'andamento',
-      etapas: montarEtapas(maisDias(seg, -147), maisDias(seg, 112), [100, 100, 100, 92, 78, 85, 40, 15, 0, 0, 0]),
+      ...cronogramaDaObra('ob_vila', 0.58, 1.7),
       relatorios: [
         rel(0, {
           resumo: 'Semana concentrada no assentamento do porcelanato da área social. Chegamos a 40% do revestimento total. A equipe de elétrica finalizou a passagem de cabos do pavimento superior e iniciamos os testes de tomadas dos quartos.\n\nA bancada da cozinha foi conferida com a medida final de marcenaria e liberada para produção.',
           proximos: 'Concluir o porcelanato da sala e circulação, iniciar o rejunte e receber a primeira remessa de marcenaria dos dormitórios.',
           efetivo: 9, dias_trabalhados: 5, autor: 'u_eng',
           fotos: [
-            { id: uid('f'), src: fotoExemplo('a', 'Porcelanato da sala em execução'), cap: 'Assentamento do porcelanato da sala, alinhamento conferido a laser', etapa: 'et7' },
-            { id: uid('f'), src: fotoExemplo('b', 'Quadro elétrico do pavimento superior'), cap: 'Quadro do pavimento superior com circuitos identificados', etapa: 'et5' },
-            { id: uid('f'), src: fotoExemplo('c', 'Área da cozinha'), cap: 'Cozinha pronta para receber a marcenaria', etapa: 'et8' },
+            { id: uid('f'), src: fotoExemplo('a', 'Porcelanato da sala em execução'), cap: 'Assentamento do porcelanato da sala, alinhamento conferido a laser', etapa: 'f8' },
+            { id: uid('f'), src: fotoExemplo('b', 'Quadro elétrico do pavimento superior'), cap: 'Quadro do pavimento superior com circuitos identificados', etapa: 'f4' },
+            { id: uid('f'), src: fotoExemplo('c', 'Área da cozinha'), cap: 'Cozinha pronta para receber a marcenaria', etapa: 'f9' },
           ],
           atrasos: [],
           comentarios: [
@@ -396,8 +557,8 @@ function semear() {
           proximos: 'Avançar com o porcelanato da área social e concluir os testes elétricos.',
           efetivo: 8, dias_trabalhados: 4, autor: 'u_eng',
           fotos: [
-            { id: uid('f'), src: fotoExemplo('c', 'Paginação do banho social'), cap: 'Paginação do banho social definida com a arquiteta', etapa: 'et7' },
-            { id: uid('f'), src: fotoExemplo('d', 'Contrapiso liberado'), cap: 'Contrapiso curado e nivelado', etapa: 'et6' },
+            { id: uid('f'), src: fotoExemplo('c', 'Paginação do banho social'), cap: 'Paginação do banho social definida com a arquiteta', etapa: 'f8' },
+            { id: uid('f'), src: fotoExemplo('d', 'Contrapiso liberado'), cap: 'Contrapiso curado e nivelado', etapa: 'f6' },
           ],
           atrasos: [
             { id: uid('a'), motivo: 'material', dias: 1, resp: 'Fornecedor', descricao: 'A remessa de porcelanato 120x120 chegou na quarta em vez de segunda. Perdemos um dia de assentamento.' },
@@ -408,8 +569,8 @@ function semear() {
           proximos: 'Aguardar a cura do contrapiso e iniciar a paginação dos revestimentos.',
           efetivo: 10, dias_trabalhados: 5, autor: 'u_eng',
           fotos: [
-            { id: uid('f'), src: fotoExemplo('d', 'Contrapiso em execução'), cap: 'Contrapiso da área social sendo sarrafeado', etapa: 'et6' },
-            { id: uid('f'), src: fotoExemplo('b', 'Teste de estanqueidade'), cap: 'Teste de estanqueidade do banho da suíte', etapa: 'et4' },
+            { id: uid('f'), src: fotoExemplo('d', 'Contrapiso em execução'), cap: 'Contrapiso da área social sendo sarrafeado', etapa: 'f6' },
+            { id: uid('f'), src: fotoExemplo('b', 'Teste de estanqueidade'), cap: 'Teste de estanqueidade do banho da suíte', etapa: 'f3' },
           ],
           atrasos: [],
         }),
@@ -418,7 +579,7 @@ function semear() {
           proximos: 'Retomar o contrapiso externo assim que o tempo firmar.',
           efetivo: 7, dias_trabalhados: 2, autor: 'u_eng2',
           fotos: [
-            { id: uid('f'), src: fotoExemplo('b', 'Area gourmet coberta com lona'), cap: 'Área gourmet protegida com lona durante a chuva', etapa: 'et6' },
+            { id: uid('f'), src: fotoExemplo('b', 'Area gourmet coberta com lona'), cap: 'Área gourmet protegida com lona durante a chuva', etapa: 'f6' },
           ],
           atrasos: [
             { id: uid('a'), motivo: 'chuva', dias: 3, resp: 'Clima', descricao: 'Três dias de chuva forte impediram o contrapiso da área externa e a movimentação de material pelo quintal.' },
@@ -430,8 +591,8 @@ function semear() {
           proximos: 'Iniciar a impermeabilização dos banheiros e o contrapiso.',
           efetivo: 10, dias_trabalhados: 5, autor: 'u_eng',
           fotos: [
-            { id: uid('f'), src: fotoExemplo('a', 'Prumada hidraulica'), cap: 'Prumada hidráulica do pavimento superior testada', etapa: 'et4' },
-            { id: uid('f'), src: fotoExemplo('c', 'Eletrodutos da area social'), cap: 'Eletrodutos embutidos na área social', etapa: 'et5' },
+            { id: uid('f'), src: fotoExemplo('a', 'Prumada hidraulica'), cap: 'Prumada hidráulica do pavimento superior testada', etapa: 'f3' },
+            { id: uid('f'), src: fotoExemplo('c', 'Eletrodutos da area social'), cap: 'Eletrodutos embutidos na área social', etapa: 'f4' },
           ],
           atrasos: [],
         }),
@@ -440,8 +601,8 @@ function semear() {
           proximos: 'Concluir as prumadas hidráulicas e iniciar a elétrica do pavimento superior.',
           efetivo: 11, dias_trabalhados: 5, autor: 'u_eng',
           fotos: [
-            { id: uid('f'), src: fotoExemplo('a', 'Alvenaria do closet'), cap: 'Alvenaria nova do closet levantada', etapa: 'et3' },
-            { id: uid('f'), src: fotoExemplo('d', 'Verga da abertura da sala'), cap: 'Verga executada conforme projeto estrutural', etapa: 'et3' },
+            { id: uid('f'), src: fotoExemplo('a', 'Alvenaria do closet'), cap: 'Alvenaria nova do closet levantada', etapa: 'f2' },
+            { id: uid('f'), src: fotoExemplo('d', 'Verga da abertura da sala'), cap: 'Verga executada conforme projeto estrutural', etapa: 'f2' },
           ],
           atrasos: [
             { id: uid('a'), motivo: 'imprevisto', dias: 2, resp: 'Obra', descricao: 'Ao abrir a parede da sala encontramos uma viga fora da posição do projeto original. Foi necessário revisar o reforço com o calculista.' },
@@ -464,15 +625,14 @@ function semear() {
       area: 180,
       valor: 740000,
       cliente_id: 'u_cli2', arquiteto_id: 'u_arq2', engenheiro_id: 'u_eng',
-      inicio: maisDias(seg, -77), prazo: maisDias(seg, 56),
       status: 'andamento',
-      etapas: montarEtapas(maisDias(seg, -77), maisDias(seg, 56), [100, 100, 90, 70, 60, 55, 20, 0, 0, 0, 0]),
+      ...cronogramaDaObra('ob_loja', 0.62, 1.15),
       relatorios: [
         rel(0, {
           resumo: 'Concluímos o forro de gesso da área de vendas e iniciamos o contrapiso do estoque. A vitrine foi medida pelo fornecedor de vidro e a produção começa na segunda.',
           proximos: 'Contrapiso do estoque e início do revestimento da parede de destaque.',
           efetivo: 6, dias_trabalhados: 5, autor: 'u_eng',
-          fotos: [{ id: uid('f'), src: fotoExemplo('b', 'Forro da area de vendas'), cap: 'Forro de gesso da área de vendas concluído', etapa: 'et3' }],
+          fotos: [{ id: uid('f'), src: fotoExemplo('b', 'Forro da area de vendas'), cap: 'Forro de gesso da área de vendas concluído', etapa: 'f2' }],
           atrasos: [
             { id: uid('a'), motivo: 'condominio', dias: 2, resp: 'Terceiros', descricao: 'A administração do prédio liberou a carga e descarga apenas depois das 18h em dois dias da semana, reduzindo o ritmo da equipe.' },
           ],
@@ -481,14 +641,14 @@ function semear() {
           resumo: 'Infraestrutura elétrica dos provadores concluída e circuito de iluminação da vitrine testado. A marcenaria confirmou o prazo de 25 dias para as gôndolas.',
           proximos: 'Fechar o forro da área de vendas.',
           efetivo: 6, dias_trabalhados: 5, autor: 'u_eng',
-          fotos: [{ id: uid('f'), src: fotoExemplo('c', 'Infra eletrica dos provadores'), cap: 'Infraestrutura elétrica dos provadores', etapa: 'et5' }],
+          fotos: [{ id: uid('f'), src: fotoExemplo('c', 'Infra eletrica dos provadores'), cap: 'Infraestrutura elétrica dos provadores', etapa: 'f4' }],
           atrasos: [],
         }),
         rel(2, {
           resumo: 'Semana de alvenaria: fechamento dos provadores e da parede do caixa. Recebemos a revisão 02 do projeto com a mudança na posição do balcão, o que exigiu refazer um trecho de 3 m de parede já levantada.',
           proximos: 'Iniciar a elétrica dos provadores.',
           efetivo: 7, dias_trabalhados: 5, autor: 'u_eng',
-          fotos: [{ id: uid('f'), src: fotoExemplo('a', 'Alvenaria dos provadores'), cap: 'Alvenaria dos provadores em execução', etapa: 'et3' }],
+          fotos: [{ id: uid('f'), src: fotoExemplo('a', 'Alvenaria dos provadores'), cap: 'Alvenaria dos provadores em execução', etapa: 'f2' }],
           atrasos: [
             { id: uid('a'), motivo: 'projeto', dias: 3, resp: 'Arquiteto', descricao: 'A revisão 02 mudou a posição do balcão do caixa depois da parede levantada. Demolição e reexecução de 3 m de alvenaria.' },
           ],
@@ -507,17 +667,16 @@ function semear() {
       area: 210,
       valor: 620000,
       cliente_id: 'u_cli3', arquiteto_id: 'u_arq', engenheiro_id: 'u_eng2',
-      inicio: maisDias(seg, -35), prazo: maisDias(seg, 154),
       status: 'andamento',
-      etapas: montarEtapas(maisDias(seg, -35), maisDias(seg, 154), [100, 85, 30, 10, 5, 0, 0, 0, 0, 0, 0]),
+      ...cronogramaDaObra('ob_jardins', 0.18, 1.35),
       relatorios: [
         rel(0, {
           resumo: 'Demolição concluída em 85%. A retirada do piso de tacos da sala revelou um contrapiso irregular, com desnível de até 4 cm, que vai exigir regularização adicional.\n\nOrçamento complementar enviado à cliente para aprovação.',
           proximos: 'Concluir a demolição e iniciar a alvenaria da suíte.',
           efetivo: 5, dias_trabalhados: 5, autor: 'u_eng2',
           fotos: [
-            { id: uid('f'), src: fotoExemplo('d', 'Demolicao da sala'), cap: 'Sala após a retirada do piso de tacos', etapa: 'et2' },
-            { id: uid('f'), src: fotoExemplo('a', 'Desnivel do contrapiso'), cap: 'Desnível de 4 cm identificado no contrapiso', etapa: 'et6' },
+            { id: uid('f'), src: fotoExemplo('d', 'Demolicao da sala'), cap: 'Sala após a retirada do piso de tacos', etapa: 'f2' },
+            { id: uid('f'), src: fotoExemplo('a', 'Desnivel do contrapiso'), cap: 'Desnível de 4 cm identificado no contrapiso', etapa: 'f6' },
           ],
           atrasos: [
             { id: uid('a'), motivo: 'imprevisto', dias: 2, resp: 'Obra', descricao: 'Contrapiso existente fora de nível, não identificável antes da demolição. Serviço adicional de regularização em orçamento.' },
@@ -527,7 +686,7 @@ function semear() {
           resumo: 'Início da obra com a montagem do canteiro, proteção das áreas comuns do prédio e cadastro da equipe na portaria. Demolição das paredes da cozinha iniciada conforme o projeto de layout.',
           proximos: 'Avançar com a demolição da sala e dos banheiros.',
           efetivo: 5, dias_trabalhados: 4, autor: 'u_eng2',
-          fotos: [{ id: uid('f'), src: fotoExemplo('c', 'Protecao das areas comuns'), cap: 'Proteção do hall e do elevador de serviço', etapa: 'et1' }],
+          fotos: [{ id: uid('f'), src: fotoExemplo('c', 'Protecao das areas comuns'), cap: 'Proteção do hall e do elevador de serviço', etapa: 'f1' }],
           atrasos: [
             { id: uid('a'), motivo: 'condominio', dias: 1, resp: 'Terceiros', descricao: 'O condomínio exigiu ART e seguro adicionais antes de liberar o início, o que consumiu o primeiro dia.' },
           ],
@@ -539,6 +698,15 @@ function semear() {
     },
   ];
 
+  /* O executado de cada tarefa, com algumas frentes propositalmente
+     mais lentas para a demonstração ter história para contar. */
+  const RITMOS = {
+    ob_vila: { f8: 0.75, f7: 0.85, f4: 0.9 },
+    ob_loja: { f5: 0.8, f6: 0.7 },
+    ob_jardins: { f2: 0.9, f3: 0.6 },
+  };
+  obras.forEach(o => preencherProgresso(o.etapas, RITMOS[o.id] || {}));
+
   /* Fotografa o percentual da obra ao fim de cada semana relatada,
      para que a linha do tempo mostre o avanço de uma semana à outra. */
   obras.forEach(o => {
@@ -549,5 +717,11 @@ function semear() {
     });
   });
 
-  return { versao: 1, empresa: { nome: 'SPX Engenharia', sigla: 'SPX' }, usuarios, obras };
+  obras.forEach(o => enriquecerObra(o, configGestao(o.id)));
+
+  return {
+    versao: 2,
+    empresa: { nome: 'SPX Engenharia', sigla: 'SPX' },
+    usuarios, fornecedores: FORNECEDORES, obras,
+  };
 }
